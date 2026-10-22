@@ -12,6 +12,7 @@
   "exports": {
     ".": "./src/index.js",
     "./style.scss": "./src/scss/index.scss",
+    "./style-element-plus.scss": "./src/scss/element-plus.scss",
     "./tokens.scss": "./src/scss/tokens.scss",
     "./scss/*": "./src/scss/*"
   },
@@ -28,7 +29,13 @@
   },
   "peerDependencies": {
     "bootstrap": "^5.3.8",
-    "vue": "^3.4.0"
+    "vue": "^3.4.0",
+    "element-plus": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "element-plus": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.10",

@@ -42,6 +42,15 @@ import CraneladUi from '@cranelad/ui'
 app.use(CraneladUi) // v-click-outside, <n-button>, <fg-input>, <parallax>
 ```
 
+Projects that use [Element Plus](https://element-plus.org) import
+`style-element-plus.scss` instead: the same kit plus theme styles for Element's
+inputs, selects, date pickers and carousel. (Element Plus is an optional peer
+dependency; the kit's own components don't need it.)
+
+```js
+import '@cranelad/ui/style-element-plus.scss'
+```
+
 To use the theme's variables and mixins in a project's own Sass, import the
 tokens (no CSS output, so the kit isn't compiled twice):
 
@@ -66,6 +75,7 @@ import { Card, Navbar, NavLink, DropDown, Alert } from '@cranelad/ui'
 | `src/scss/kit/` | The kit's own component styles on top of Bootstrap 5 (`.form-group`, `.btn-block`, input-group addons, `.close`, dropdown positioning, ...) |
 | `src/scss/now-ui-kit/` | The Now UI Kit theme |
 | `src/scss/index.scss` | The complete stylesheet (`@cranelad/ui/style.scss`) |
+| `src/scss/element-plus.scss` | The same plus Element Plus styles (`@cranelad/ui/style-element-plus.scss`) |
 | `src/scss/tokens.scss` | Variables and mixins only (`@cranelad/ui/tokens.scss`) |
 
 The theme was designed for Bootstrap 4, so a few Bootstrap 4 conventions are

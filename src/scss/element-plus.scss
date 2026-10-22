@@ -1,0 +1,14 @@
+// @cranelad/ui with styles for Element Plus components (inputs and selects,
+// date pickers, carousel), exported as @cranelad/ui/style-element-plus.scss.
+// Use it instead of style.scss in projects that use Element Plus.
+//
+// These styles @extend the kit's classes (.form-control, .btn-round, ...), so
+// they are compiled together with the whole kit rather than as a separate file.
+
+@import "index";
+
+@import "now-ui-kit/element-plus/carousel";
+@import "now-ui-kit/element-plus/date_picker";
+@import "now-ui-kit/element-plus/input";
+// @import "now-ui-kit/element-plus/tooltip";
+// @import "now-ui-kit/element-plus/popover";
