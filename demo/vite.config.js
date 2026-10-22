@@ -1,0 +1,32 @@
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+// Kitchen-sink demo of every component and theme style in the kit. It imports
+// the kit by its package name, the same way a consuming project would.
+export default defineConfig({
+  root: fileURLToPath(new URL('.', import.meta.url)),
+  base: './',
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      '@cranelad/ui/bootstrap.scss': fileURLToPath(new URL('../src/scss/bootstrap.scss', import.meta.url)),
+      '@cranelad/ui/theme.scss': fileURLToPath(new URL('../src/scss/now-ui-kit.scss', import.meta.url)),
+      '@cranelad/ui/demo.css': fileURLToPath(new URL('../src/css/demo.css', import.meta.url)),
+      '@cranelad/ui': fileURLToPath(new URL('../src/index.js', import.meta.url)),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // The theme predates the Sass module system.
+        quietDeps: true,
+        silenceDeprecations: ['import', 'global-builtin', 'color-functions', 'slash-div', 'legacy-js-api', 'if-function'],
+      },
+    },
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
+})
