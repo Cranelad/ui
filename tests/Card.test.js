@@ -38,6 +38,10 @@ describe('Card', () => {
     expect(mount(Card, { props: { category: 'Cat' } }).find('h6.card-category').text()).toBe('Cat');
   });
 
+  it('renders the category slot', () => {
+    expect(mount(Card, { slots: { category: '<em>Cat</em>' } }).find('h6.card-category em').text()).toBe('Cat');
+  });
+
   it('renders image, avatar, info and raw-content slots', () => {
     const w = mount(Card, { slots: { image: '<img>', avatar: '<span class="a"></span>', info: 'i', 'raw-content': '<div class="raw"></div>' } });
     expect(w.find('.card-image img').exists()).toBe(true);
