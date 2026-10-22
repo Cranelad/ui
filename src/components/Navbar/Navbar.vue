@@ -1,186 +1,134 @@
 <template>
-  <nav :class="classes" class="navbar">
+  <nav class="navbar" :class="classes">
     <div class="container-fluid">
       <div class="navbar-translate">
-        <slot v-bind="slotData"></slot>
-        <navbar-toggle-button
-          :toggled="showMenu"
-          @click.stop="toggle"
-        ></navbar-toggle-button>
+        <slot v-bind="slotData" />
+        <NavbarToggleButton :toggled="showMenu" @click.stop="toggle" />
       </div>
       <div
-        class="navbar-collapse collapse"
-        v-click-outside="close"
-        :style="menuImage ? `background: url(${menuImage}) 0% 0% / cover;` : ''"
-        :class="[
-          { show: showMenu },
-          { 'has-image': menuImage },
-          navMenuClasses
-        ]"
         v-if="$slots['navbar-menu']"
-        data-color="orange"
         id="navigation"
+        v-click-outside="close"
+        class="navbar-collapse collapse"
+        :class="[{ show: showMenu, 'has-image': menuImage }, navMenuClasses]"
+        :style="menuImage ? `background: url(${menuImage}) 0% 0% / cover;` : ''"
+        data-color="orange"
       >
-        <slot name="before-menu"></slot>
+        <slot name="before-menu" />
         <ul class="navbar-nav" :class="menuClasses">
-          <slot name="navbar-menu" v-bind="slotData"></slot>
+          <slot name="navbar-menu" v-bind="slotData" />
         </ul>
-        <slot name="after-menu"></slot>
+        <slot name="after-menu" />
       </div>
     </div>
   </nav>
 </template>
-<script>
-import NavbarToggleButton from './NavbarToggleButton.vue';
-let resizeTimeout;
-function resizeThrottler(actualResizeHandler) {
-  // ignore resize events as long as an actualResizeHandler execution is in the queue
-  if (!resizeTimeout) {
-    resizeTimeout = setTimeout(() => {
-      resizeTimeout = null;
-      actualResizeHandler();
 
-      // The actualResizeHandler will execute at a rate of 15fps
+<script>
+// Module scope, so defineProps (which is hoisted out of setup) can use it.
+const TYPES = ['white', 'default', 'primary', 'danger', 'success', 'warning', 'info', 'black'];
+</script>
+
+<script setup>
+import { ref, computed, provide, onMounted, onBeforeUnmount } from 'vue';
+import NavbarToggleButton from './NavbarToggleButton.vue';
+import clickOutside from '../../directives/click-outside.js';
+
+defineOptions({ name: 'navbar' });
+
+const props = defineProps({
+  /** Transparent background (navbar-transparent). */
+  transparent: Boolean,
+  /** navbar-{position}; "fixed" gives fixed-top. */
+  position: { type: String, default: 'relative' },
+  /** Classes for the menu's <ul class="navbar-nav">, e.g. "ms-auto". */
+  menuClasses: { type: [String, Object, Array], default: undefined },
+  /** Stay transparent until the page is scrolled this many pixels, then take the colour of `type`. */
+  colorOnScroll: { type: Number, default: 0 },
+  /** Background colour: bg-{type}. */
+  type: { type: String, default: 'white', validator: value => TYPES.includes(value) },
+  /** Classes for the collapsing menu container. */
+  navMenuClasses: { type: String, default: '' },
+  /** Background image for the collapsed (mobile) menu. */
+  menuImage: { type: String, default: undefined },
+  /** Breakpoint from which the menu is expanded (navbar-expand-{expand}); false never expands. */
+  expand: { type: [String, Boolean], default: 'lg' }
+});
+
+const emit = defineEmits(['open', 'close']);
+
+const vClickOutside = clickOutside;
+const showMenu = ref(false);
+const scrollColorClass = ref('');
+const scrollValue = ref(0);
+
+const classes = computed(() => {
+  const transparentUntilScrolled = props.colorOnScroll && scrollValue.value < props.colorOnScroll;
+  return [
+    {
+      'navbar-transparent': props.transparent || transparentUntilScrolled,
+      [`bg-${props.type}`]: !props.transparent && props.colorOnScroll === 0
+    },
+    props.expand ? `navbar-expand-${props.expand}` : '',
+    props.position === 'fixed' ? 'fixed-top' : `navbar-${props.position}`,
+    scrollColorClass.value
+  ];
+});
+
+// Opening the menu also flags <html> (nav-open), which the theme uses.
+function setNav(value) {
+  const htmlClasses = document.documentElement.classList;
+  htmlClasses.toggle('nav-open', value);
+  showMenu.value = htmlClasses.contains('nav-open');
+  emit(showMenu.value ? 'open' : 'close');
+}
+
+function toggle() {
+  setNav(!showMenu.value);
+}
+
+function open() {
+  setNav(true);
+}
+
+function close() {
+  if (showMenu.value) {
+    setNav(false);
+  }
+}
+
+const slotData = computed(() => ({ toggle, open, close, isToggled: showMenu.value }));
+
+// NavLinks inside the menu close it when clicked.
+provide('closeNavbar', close);
+
+function handleScroll() {
+  const value = document.body.scrollTop || document.documentElement.scrollTop;
+  scrollValue.value = value;
+  scrollColorClass.value = props.colorOnScroll > 0 && value > props.colorOnScroll ? `bg-${props.type}` : '';
+}
+
+// Check the scroll position at most every 66 ms (about 15 times a second).
+let scrollTimeout = null;
+function onScroll() {
+  if (scrollTimeout === null) {
+    scrollTimeout = setTimeout(() => {
+      scrollTimeout = null;
+      handleScroll();
     }, 66);
   }
 }
 
-export default {
-  name: 'navbar',
-  props: {
-    transparent: {
-      type: Boolean,
-      default: false
-    },
-    position: {
-      type: String,
-      default: 'relative'
-    },
-    menuClasses: {
-      type: [String, Object, Array]
-    },
-    colorOnScroll: {
-      type: Number,
-      default: 0
-    },
-    type: {
-      type: String,
-      default: 'white',
-      validator(value) {
-        return [
-          'white',
-          'default',
-          'primary',
-          'danger',
-          'success',
-          'warning',
-          'info',
-          'black'
-        ].includes(value);
-      }
-    },
-    navMenuClasses: {
-      type: String,
-      default: ''
-    },
-    menuImage: {
-      type: String
-    },
-    expand: {
-      type: [String, Boolean],
-      default: 'lg'
-    }
-  },
-  provide() {
-    return {
-      closeNavbar: this.close
-    };
-  },
-  emits: ['open', 'close'],
-  components: {
-    NavbarToggleButton
-  },
-  data() {
-    return {
-      showMenu: false,
-      extraNavClasses: '',
-      currentScrollValue: 0
-    };
-  },
-  computed: {
-    slotData() {
-      return {
-        toggle: this.toggle,
-        open: this.open,
-        close: this.close,
-        isToggled: this.showMenu
-      };
-    },
-    classes() {
-      let color = `bg-${this.type}`;
-      let navPosition = `navbar-${this.position}`;
-      let colorOnScrollTransparent =
-        this.colorOnScroll && this.currentScrollValue < this.colorOnScroll;
+onMounted(() => {
+  handleScroll();
+  document.addEventListener('scroll', onScroll);
+});
 
-      if (this.position === 'fixed') {
-        navPosition = 'fixed-top';
-      }
-
-      return [
-        { 'navbar-transparent': this.transparent || colorOnScrollTransparent },
-        { [color]: !this.transparent && this.colorOnScroll === 0 },
-        this.expand ? `navbar-expand-${this.expand}` : '',
-        navPosition,
-        this.extraNavClasses
-      ];
-    }
-  },
-  methods: {
-    setNav(value) {
-      let htmlClasses = document.querySelector('html').classList;
-      if (value) {
-        htmlClasses.add('nav-open');
-      } else {
-        htmlClasses.remove('nav-open');
-      }
-      let isOpen = htmlClasses.contains('nav-open');
-      let eventToTrigger = isOpen ? 'open' : 'close';
-      this.showMenu = isOpen;
-      this.$emit(eventToTrigger);
-    },
-    toggle() {
-      this.setNav(!this.showMenu);
-    },
-    open() {
-      this.setNav(true);
-    },
-    close() {
-      if (this.showMenu) {
-        this.setNav(false);
-      }
-    },
-    handleScroll() {
-      let scrollValue =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      this.currentScrollValue = scrollValue;
-      if (this.colorOnScroll > 0 && scrollValue > this.colorOnScroll) {
-        this.extraNavClasses = `bg-${this.type}`;
-      } else {
-        if (this.extraNavClasses) {
-          this.extraNavClasses = '';
-        }
-      }
-    },
-    scrollListener() {
-      resizeThrottler(this.handleScroll);
-    }
-  },
-  mounted() {
-    document.addEventListener('scroll', this.scrollListener);
-  },
-  beforeUnmount() {
-    document.removeEventListener('scroll', this.scrollListener);
+onBeforeUnmount(() => {
+  document.removeEventListener('scroll', onScroll);
+  clearTimeout(scrollTimeout);
+  if (showMenu.value) {
+    document.documentElement.classList.remove('nav-open');
   }
-};
+});
 </script>
-<style></style>

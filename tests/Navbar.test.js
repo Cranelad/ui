@@ -152,3 +152,31 @@ describe('Navbar', () => {
     w.unmount();
   });
 });
+
+describe('Navbar fixes', () => {
+  it('throttles scroll handling per navbar, not across all of them', async () => {
+    vi.useFakeTimers();
+    const a = mount(Navbar, { global, props: { type: 'black', colorOnScroll: 100 }, attachTo: document.body });
+    const b = mount(Navbar, { global, props: { type: 'primary', colorOnScroll: 100 }, attachTo: document.body });
+    setScroll(150);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(a.classes()).toContain('bg-black');
+    expect(b.classes()).toContain('bg-primary');
+  });
+
+  it('removes nav-open from <html> when unmounted with the menu open', async () => {
+    const w = mount(Navbar, { global, slots: menu, attachTo: document.body });
+    await w.find('.navbar-toggler').trigger('click');
+    expect(document.documentElement.classList.contains('nav-open')).toBe(true);
+    w.unmount();
+    expect(document.documentElement.classList.contains('nav-open')).toBe(false);
+  });
+
+  it('picks up the scroll position when mounted', async () => {
+    Object.defineProperty(document.documentElement, 'scrollTop', { value: 500, configurable: true });
+    const w = mount(Navbar, { global, props: { type: 'black', colorOnScroll: 100 } });
+    await w.vm.$nextTick();
+    expect(w.classes()).toContain('bg-black');
+    expect(w.classes()).not.toContain('navbar-transparent');
+  });
+});
