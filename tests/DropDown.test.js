@@ -39,6 +39,23 @@ describe('DropDown', () => {
     w.unmount();
   });
 
+  it('only emits change when the state changes', async () => {
+    const w = mount(DropDown, { global, attachTo: document.body });
+    document.body.click();
+    document.body.click();
+    expect(w.emitted('change')).toBeUndefined();
+    w.unmount();
+  });
+
+  it('works without the plugin (imports v-click-outside itself)', async () => {
+    const w = mount(DropDown, { attachTo: document.body });
+    await w.trigger('click');
+    document.body.click();
+    await w.vm.$nextTick();
+    expect(w.classes()).not.toContain('show');
+    w.unmount();
+  });
+
   it('closes when a NavLink inside is clicked', async () => {
     const w = mount({
       components: { DropDown, NavLink },
