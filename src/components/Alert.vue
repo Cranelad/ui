@@ -1,18 +1,13 @@
 <template>
   <transition name="fade">
-    <div class="alert" :class="[`alert-${type}`]" role="alert" v-if="visible">
-      <slot v-if="!dismissible"></slot>
+    <div v-if="visible" class="alert" :class="`alert-${type}`" role="alert">
+      <slot v-if="!dismissible" />
       <div v-else class="container">
-        <slot></slot>
-        <slot name="dismiss-icon">
-          <button
-            type="button"
-            class="close"
-            aria-label="Close"
-            @click="dismissAlert"
-          >
+        <slot />
+        <slot name="dismiss-icon" :dismiss="dismiss">
+          <button type="button" class="close" aria-label="Close" @click="dismiss">
             <span aria-hidden="true">
-              <i class="now-ui-icons ui-1_simple-remove"></i>
+              <i class="now-ui-icons ui-1_simple-remove" />
             </span>
           </button>
         </slot>
@@ -20,30 +15,30 @@
     </div>
   </transition>
 </template>
-<script>
 
-export default {
-  name: 'alert',
-  props: {
-    type: {
-      type: String,
-      default: 'default',
-      description: 'Alert type'
-    },
-    dismissible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      visible: true
-    };
-  },
-  methods: {
-    dismissAlert() {
-      this.visible = false;
-    }
-  }
-};
+<script>
+// Module scope, so defineProps (which is hoisted out of setup) can use it.
+const TYPES = ['default', 'primary', 'secondary', 'info', 'success', 'warning', 'danger', 'light', 'dark'];
+</script>
+
+<script setup>
+import { ref } from 'vue';
+
+defineOptions({ name: 'alert' });
+
+defineProps({
+  /** Colour: alert-{type}. */
+  type: { type: String, default: 'default', validator: value => TYPES.includes(value) },
+  /** Show a close button; the alert hides itself when it is clicked. */
+  dismissible: Boolean
+});
+
+const emit = defineEmits(['dismiss']);
+
+const visible = ref(true);
+
+function dismiss() {
+  visible.value = false;
+  emit('dismiss');
+}
 </script>
