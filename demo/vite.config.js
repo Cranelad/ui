@@ -10,8 +10,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@cranelad/ui/bootstrap.scss': fileURLToPath(new URL('../src/scss/bootstrap.scss', import.meta.url)),
-      '@cranelad/ui/theme.scss': fileURLToPath(new URL('../src/scss/now-ui-kit.scss', import.meta.url)),
+      '@cranelad/ui/style.scss': fileURLToPath(new URL('../src/scss/index.scss', import.meta.url)),
       '@cranelad/ui/demo.css': fileURLToPath(new URL('../src/css/demo.css', import.meta.url)),
       '@cranelad/ui': fileURLToPath(new URL('../src/index.js', import.meta.url)),
     },

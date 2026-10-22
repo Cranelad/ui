@@ -11,8 +11,7 @@
   ],
   "exports": {
     ".": "./src/index.js",
-    "./bootstrap.scss": "./src/scss/bootstrap.scss",
-    "./theme.scss": "./src/scss/now-ui-kit.scss",
+    "./style.scss": "./src/scss/index.scss",
     "./demo.css": "./src/css/demo.css",
     "./scss/*": "./src/scss/*"
   },

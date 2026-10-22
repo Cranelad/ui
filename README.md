@@ -34,9 +34,8 @@ export default defineConfig({
 ## Use
 
 ```js
-// Styles: Bootstrap first, then the theme.
-import '@cranelad/ui/bootstrap.scss'
-import '@cranelad/ui/theme.scss'
+// Styles: Bootstrap 5 and the theme, in one stylesheet.
+import '@cranelad/ui/style.scss'
 
 // Components
 import CraneladUi from '@cranelad/ui'
@@ -51,8 +50,8 @@ import { Card, Navbar, NavLink, DropDown, Alert } from '@cranelad/ui'
 
 ## Bootstrap 5 and the Bootstrap 4 look
 
-The theme was designed for Bootstrap 4. `src/scss/bootstrap.scss` compiles
-Bootstrap 5 with its variables set to the Bootstrap 4 values, and adds back the
+The theme was designed for Bootstrap 4. `src/scss/_config.scss` sets Bootstrap
+5's variables to the Bootstrap 4 values, and `src/scss/_base.scss` adds back the
 Bootstrap 4 behaviour the theme relies on. `src/scss/_bootstrap4-grid.scss`
 replaces Bootstrap 5's grid with Bootstrap 4's.
 

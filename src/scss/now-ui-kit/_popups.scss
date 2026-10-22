@@ -1,5 +1,5 @@
 .popover{
-    font-size: $font-size-base;
+    font-size: $theme-font-size-base;
     box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.2);
     border: none;
     line-height: 1.7;
@@ -17,7 +17,7 @@
 
     .popover-header{
         color: $default-color-opacity;
-        font-size: $font-size-base;
+        font-size: $theme-font-size-base;
         text-transform: capitalize;
         font-weight: $font-weight-semi;
         margin: 0;
@@ -79,7 +79,7 @@
     padding: $padding-base-vertical $padding-base-horizontal;
     min-width: 130px;
     background-color: $white-color;
-    font-size: $font-size-base;
+    font-size: $theme-font-size-base;
     color: inherit;
     box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);
 }

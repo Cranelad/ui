@@ -44,7 +44,7 @@ $box-shadow-lg: 0px 10px 50px 0px rgba(0, 0, 0, 0.2);
     }
   }
   .el-date-picker__header-label, div {
-    font-size: $font-size-base;
+    font-size: $theme-font-size-base;
     font-weight: $font-weight-light;
     color: white;
     &:hover {
@@ -60,7 +60,7 @@ $box-shadow-lg: 0px 10px 50px 0px rgba(0, 0, 0, 0.2);
   .el-year-table td {
     color: white;
     font-family: $sans-serif-family;
-    font-size: $font-size-base;
+    font-size: $theme-font-size-base;
     font-weight: $font-weight-light;
     border: none;
   }
@@ -75,7 +75,7 @@ $box-shadow-lg: 0px 10px 50px 0px rgba(0, 0, 0, 0.2);
     padding: 0;
     color: white;
     font-family: $sans-serif-family;
-    font-size: $font-size-base;
+    font-size: $theme-font-size-base;
     font-weight: $font-weight-light;
 
     &.current span,
@@ -91,7 +91,7 @@ $box-shadow-lg: 0px 10px 50px 0px rgba(0, 0, 0, 0.2);
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: $font-size-base;
+      font-size: $theme-font-size-base;
 
     }
     span {
