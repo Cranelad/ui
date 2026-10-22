@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { Button } from '../src/index.js';
 
@@ -37,6 +37,16 @@ describe('Button (n-button)', () => {
     const w = mount(Button, { slots: { label: 'L', labelRight: 'R', default: 'Text' } });
     expect(w.find('.btn-label:not(.btn-label-right)').text()).toBe('L');
     expect(w.find('.btn-label.btn-label-right').text()).toBe('R');
+  });
+
+  it('validates type and size', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    mount(Button, { props: { type: 'neutral', size: 'sm' } });
+    mount(Button, { props: { type: 'facebook', size: 'lg' } });
+    expect(warn).not.toHaveBeenCalled();
+    mount(Button, { props: { type: 'purple', size: 'huge' } });
+    expect(warn.mock.calls.map(c => c[0]).join('\n')).toMatch(/Invalid prop: custom validator check failed for prop "type"[\s\S]*prop "size"/);
+    warn.mockRestore();
   });
 
   it('is registered as n-button', () => {

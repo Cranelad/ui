@@ -1,69 +1,65 @@
 <template>
   <component
     :is="tag"
-    @click="handleClick"
     :type="nativeType"
     class="btn"
     :class="classes"
+    @click="emit('click', $event)"
   >
-    <span class="btn-label" v-if="$slots.label">
-      <slot name="label"></slot>
+    <span v-if="$slots.label" class="btn-label">
+      <slot name="label" />
     </span>
-    <slot></slot>
-    <span class="btn-label btn-label-right" v-if="$slots.labelRight">
-      <slot name="labelRight"></slot>
+    <slot />
+    <span v-if="$slots.labelRight" class="btn-label btn-label-right">
+      <slot name="labelRight" />
     </span>
   </component>
 </template>
+
 <script>
-export default {
-  name: 'n-button',
-  props: {
-    tag: {
-      type: String,
-      default: 'button'
-    },
-    type: {
-      type: String,
-      default: 'default'
-    },
-    nativeType: {
-      type: String,
-      default: 'button'
-    },
-    round: Boolean,
-    simple: Boolean,
-    block: Boolean,
-    social: Boolean,
-    link: Boolean,
-    icon: Boolean,
-    wide: Boolean,
-    size: String
-  },
-  emits: ['click'],
-  computed: {
-    classes() {
-      let btnClasses = [
-        { 'btn-simple': this.simple },
-        { 'btn-icon': this.icon },
-        { 'btn-round': this.round },
-        { 'btn-block': this.block },
-        { 'btn-social': this.social },
-        { 'btn-link': this.link },
-        { 'btn-wd': this.wide },
-        `btn-${this.type}`
-      ];
-      if (this.size) {
-        btnClasses.push(`btn-${this.size}`);
-      }
-      return btnClasses;
-    }
-  },
-  methods: {
-    handleClick(evt) {
-      this.$emit('click', evt);
-    }
-  }
-};
+// Module scope, so defineProps (which is hoisted out of setup) can use it.
+const TYPES = [
+  'default', 'primary', 'secondary', 'info', 'success', 'warning', 'danger', 'neutral', 'light', 'dark', 'link',
+  'facebook', 'twitter', 'google', 'github', 'linkedin'
+];
 </script>
-<style></style>
+
+<script setup>
+import { computed } from 'vue';
+
+defineOptions({ name: 'n-button' });
+
+const props = defineProps({
+  /** Element to render, e.g. "a" for a link styled as a button. */
+  tag: { type: String, default: 'button' },
+  /** Colour: btn-{type}. */
+  type: { type: String, default: 'default', validator: value => TYPES.includes(value) },
+  /** The element's type attribute (button, submit, reset). */
+  nativeType: { type: String, default: 'button' },
+  round: Boolean,
+  simple: Boolean,
+  block: Boolean,
+  social: Boolean,
+  link: Boolean,
+  icon: Boolean,
+  wide: Boolean,
+  /** btn-sm or btn-lg. */
+  size: { type: String, default: undefined, validator: value => ['sm', 'lg'].includes(value) }
+});
+
+const emit = defineEmits(['click']);
+
+const classes = computed(() => [
+  {
+    'btn-simple': props.simple,
+    'btn-icon': props.icon,
+    'btn-round': props.round,
+    'btn-block': props.block,
+    'btn-social': props.social,
+    'btn-link': props.link,
+    'btn-wd': props.wide
+  },
+  `btn-${props.type}`,
+  props.size ? `btn-${props.size}` : null
+]);
+</script>
