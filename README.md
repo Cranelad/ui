@@ -42,6 +42,15 @@ import CraneladUi from '@cranelad/ui'
 app.use(CraneladUi) // v-click-outside, <n-button>, <fg-input>, <parallax>
 ```
 
+To use the theme's variables and mixins in a project's own Sass, import the
+tokens (no CSS output, so the kit isn't compiled twice):
+
+```scss
+@import '@cranelad/ui/tokens.scss';
+
+.thing { color: $primary-color; }
+```
+
 Other components are imported where they are used:
 
 ```js

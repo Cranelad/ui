@@ -1,0 +1,6 @@
+// @cranelad/ui design tokens: the theme's variables and mixins, with no CSS
+// output. Import this in a project's own Sass to use $primary-color,
+// @include linear-gradient(...) etc. without compiling the kit a second time.
+
+@import "now-ui-kit/variables";
+@import "now-ui-kit/mixins";
