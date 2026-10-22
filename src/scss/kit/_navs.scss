@@ -1,0 +1,47 @@
+// Navbars and nav links.
+
+.navbar-brand {
+  display: inline-block;
+}
+
+// Nav links: Bootstrap 4 gave them no colour of their own (they used the
+// theme's link colour) unless inside .navbar-light/.navbar-dark, which the kit
+// doesn't use. Bootstrap 5 colours them through these variables.
+.nav-link {
+  --bs-nav-link-color: #{$primary-color};
+  --bs-nav-link-hover-color: #{$primary-color};
+  --bs-navbar-active-color: #{$primary-color};
+  --bs-navbar-disabled-color: #6c757d;
+}
+
+// Bootstrap 5 gives every navbar the light-navbar toggler border and colour.
+.navbar-toggler {
+  color: #000;
+  border-color: transparent;
+  border-radius: .25rem;
+}
+
+// While a .navbar-expand-* navbar is collapsed, Bootstrap 4 removed its
+// container's side padding.
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @if $infix != "" {
+    .navbar-expand#{$infix} {
+      @include media-breakpoint-down($breakpoint) {
+        > .container,
+        > .container-fluid {
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}
+
+// Keyboard focus on nav links: Bootstrap 5 swaps the browser's focus ring for
+// a box-shadow glow; Bootstrap 4 left the browser's ring alone.
+.nav-link:focus-visible {
+  outline: revert;
+  box-shadow: none;
+}

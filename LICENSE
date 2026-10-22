@@ -31,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 -------------------------------------------------------------------------------
-Bootstrap (grid adapted in src/scss/_bootstrap4-grid.scss)
+Bootstrap (Bootstrap 4 rules adapted in src/scss/kit)
 -------------------------------------------------------------------------------
 
 The MIT License (MIT)

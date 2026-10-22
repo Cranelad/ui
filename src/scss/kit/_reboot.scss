@@ -1,0 +1,24 @@
+// Base element styles that differ between Bootstrap 4 and 5.
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+small,
+.small {
+  font-weight: $font-weight-normal;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  color: revert;
+}
+
+// Bootstrap 5's reboot indents lists by 2rem; Bootstrap 4 left the browser's 40px.
+ol,
+ul {
+  padding-left: 40px;
+}

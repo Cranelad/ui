@@ -1,0 +1,84 @@
+// Forms: .form-group, control sizing and input-group addons.
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  height: calc(1.5em + .75rem + 2px);
+}
+
+// Bootstrap 5's .form-control removes the native dropdown arrow from selects
+// (it expects .form-select instead).
+select.form-control {
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
+}
+
+textarea.form-control,
+select.form-control[size],
+select.form-control[multiple] {
+  height: auto;
+}
+
+// Bootstrap 5 stops textareas being resized below one line.
+textarea.form-control {
+  min-height: 0;
+}
+
+.form-text {
+  display: block;
+}
+
+// Bootstrap 4's .form-text had no font size of its own, so the theme's
+// `small { font-size: 60% }` applied; Bootstrap 5's 80% would override it.
+small.form-text {
+  font-size: 60%;
+}
+
+// Input group addons (e.g. the icons in the login fields).
+.input-group-prepend,
+.input-group-append {
+  display: flex;
+
+  .btn {
+    position: relative;
+    z-index: 2;
+
+    &:focus {
+      z-index: 3;
+    }
+  }
+
+  .btn + .btn,
+  .btn + .input-group-text,
+  .input-group-text + .input-group-text,
+  .input-group-text + .btn {
+    margin-left: -$input-border-width;
+  }
+}
+
+.input-group-prepend { margin-right: -$input-border-width; }
+
+.input-group-append { margin-left: -$input-border-width; }
+
+// Bootstrap 5 overlaps every non-first input-group child by a pixel; Bootstrap 4
+// only overlapped the addon (via its negative margin above), not the input too.
+.input-group > .input-group-prepend + .form-control {
+  margin-left: 0 !important;
+}
+
+.input-group > .input-group-prepend > .btn,
+.input-group > .input-group-prepend > .input-group-text,
+.input-group > .input-group-append:not(:last-child) > .btn,
+.input-group > .input-group-append:not(:last-child) > .input-group-text {
+  @include border-end-radius(0);
+}
+
+.input-group > .input-group-append > .btn,
+.input-group > .input-group-append > .input-group-text,
+.input-group > .input-group-prepend:not(:first-child) > .btn,
+.input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+  @include border-start-radius(0);
+}

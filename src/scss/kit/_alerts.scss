@@ -1,0 +1,35 @@
+// The dismiss "×" used by the vform alerts and the Alert component.
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+
+  &:hover {
+    color: #000;
+    text-decoration: none;
+  }
+
+  &:not(:disabled):not(.disabled):hover,
+  &:not(:disabled):not(.disabled):focus {
+    opacity: .75;
+  }
+}
+
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: $alert-padding-y $alert-padding-x;
+  color: inherit;
+}

@@ -1,0 +1,15 @@
+// Pagination, progress bars and text utilities.
+
+.pagination {
+  border-radius: $border-radius;
+}
+
+.progress {
+  line-height: 0;
+}
+
+// Bootstrap 5 added a .text-black utility (#000, !important) that overrides the
+// theme's own .text-black ($light-black).
+.text-black {
+  color: #444 !important;
+}

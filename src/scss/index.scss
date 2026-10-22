@@ -1,10 +1,19 @@
 // @cranelad/ui: the complete stylesheet (Bootstrap 5 + the Now UI Kit theme).
 //
-// Order matters: the theme overrides Bootstrap, and the kit's base styles sit
-// between them, as they did when Bootstrap and the theme were built separately.
+// Order matters: kit/ holds the kit's own component styles on top of Bootstrap
+// (largely Bootstrap 4 behaviour the theme was built on), and the theme comes
+// last so it overrides both.
 
 @import "now-ui-kit/variables"; // the theme's design tokens, used by the config
 @import "config";
 @import "bootstrap/scss/bootstrap";
-@import "base";
+@import "kit/reboot";
+@import "kit/grid";
+@import "kit/cards";
+@import "kit/navs";
+@import "kit/dropdowns";
+@import "kit/forms";
+@import "kit/buttons";
+@import "kit/alerts";
+@import "kit/misc";
 @import "now-ui-kit";

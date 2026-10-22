@@ -57,15 +57,21 @@ Other components are imported where they are used:
 import { Card, Navbar, NavLink, DropDown, Alert } from '@cranelad/ui'
 ```
 
-## Bootstrap 5 and the Bootstrap 4 look
+## How the styles are organised
 
-The theme was designed for Bootstrap 4. `src/scss/_config.scss` sets Bootstrap
-5's variables to the Bootstrap 4 values, and `src/scss/_base.scss` adds back the
-Bootstrap 4 behaviour the theme relies on. `src/scss/_bootstrap4-grid.scss`
-replaces Bootstrap 5's grid with Bootstrap 4's.
+| Path | What |
+|---|---|
+| `src/scss/now-ui-kit/_variables.scss` | The theme's design tokens (colours, sizes) |
+| `src/scss/_config.scss` | Bootstrap 5 settings, matching the Bootstrap 4 defaults the theme was designed on |
+| `src/scss/kit/` | The kit's own component styles on top of Bootstrap 5 (`.form-group`, `.btn-block`, input-group addons, `.close`, dropdown positioning, ...) |
+| `src/scss/now-ui-kit/` | The Now UI Kit theme |
+| `src/scss/index.scss` | The complete stylesheet (`@cranelad/ui/style.scss`) |
+| `src/scss/tokens.scss` | Variables and mixins only (`@cranelad/ui/tokens.scss`) |
 
-In templates, use Bootstrap 5 utility names (`ms-auto`, `text-end`, ...) and the
-existing markup patterns (`form-group`, `btn-block`, `input-group-prepend`).
+The theme was designed for Bootstrap 4, so a few Bootstrap 4 conventions are
+part of the kit: in templates use Bootstrap 5 utility names (`ms-auto`,
+`text-end`, ...) together with the kit's markup patterns (`form-group`,
+`btn-block`, `input-group-prepend`).
 
 ### Differences from the original (Bootstrap 4) kit
 
