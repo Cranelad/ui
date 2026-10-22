@@ -5,11 +5,6 @@
 @import 'now-ui-kit/variables';
 @import 'now-ui-kit/mixins';
 
-// Plugins CSS
-@import "now-ui-kit/plugins/plugin-bootstrap-switch";
-// @import "now-ui-kit/plugins/plugin-nouislider";
-@import "now-ui-kit/plugins/plugin-datepicker";
-
 // Core CSS
 @import "now-ui-kit/buttons";
 @import "now-ui-kit/inputs";
@@ -39,8 +34,8 @@
 @import "now-ui-kit/cards/card-plain";
 @import "now-ui-kit/cards/card-signup";
 
-// example pages and sections
-@import "now-ui-kit/example-pages";
+// pages and sections
+@import "now-ui-kit/login-page";
 @import "now-ui-kit/sections";
 
 

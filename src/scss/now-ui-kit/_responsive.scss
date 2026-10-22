@@ -412,3 +412,11 @@ and ( orientation : portrait){
     margin-top: -330px;
   }
 }
+
+// Stack buttons on small screens (from the original kit's demo stylesheet).
+@media (max-width: 768px) {
+  .btn,
+  .btn-morphing {
+    margin-bottom: 10px;
+  }
+}

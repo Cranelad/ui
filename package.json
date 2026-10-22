@@ -13,7 +13,6 @@
     ".": "./src/index.js",
     "./style.scss": "./src/scss/index.scss",
     "./tokens.scss": "./src/scss/tokens.scss",
-    "./demo.css": "./src/css/demo.css",
     "./scss/*": "./src/scss/*"
   },
   "files": [

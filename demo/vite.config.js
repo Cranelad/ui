@@ -11,7 +11,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@cranelad/ui/style.scss': fileURLToPath(new URL('../src/scss/index.scss', import.meta.url)),
-      '@cranelad/ui/demo.css': fileURLToPath(new URL('../src/css/demo.css', import.meta.url)),
       '@cranelad/ui': fileURLToPath(new URL('../src/index.js', import.meta.url)),
     },
   },
