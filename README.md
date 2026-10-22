@@ -7,9 +7,10 @@ Bootstrap 5. For use in Cranelad projects only (see [LICENSE](LICENSE)).
 
 The package ships source (`.vue` and `.scss`), so the consuming project needs:
 
-- Vue 3 and Vite with `@vitejs/plugin-vue`
+- Vue 3.4+ and Vite with `@vitejs/plugin-vue`
 - `sass`
 - `bootstrap` 5.3 (peer dependency)
+- `element-plus` 2 only if you use `style-element-plus.scss` (optional peer dependency)
 
 ## Install
 
@@ -30,6 +31,9 @@ export default defineConfig({
   server: { fs: { allow: [searchForWorkspaceRoot(process.cwd()), '../ui'] } },
 })
 ```
+
+Vite's dev server doesn't watch a linked package for changes: restart it after
+changing the kit's SCSS.
 
 ## Use
 
@@ -66,6 +70,120 @@ Other components are imported where they are used:
 import { Card, Navbar, NavLink, DropDown, Alert } from '@cranelad/ui'
 ```
 
+The docs page (`npm run demo`, then open `/docs.html`) has a live example and
+code for every component.
+
+## Components
+
+### Plugin (`app.use(CraneladUi)`)
+
+Registers `v-click-outside` and the components templates commonly use without
+importing: `<n-button>`, `<fg-input>` and `<parallax>`. Everything is also
+exported by name, including the directive (`clickOutside`).
+
+### `Button` (`<n-button>`)
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `type` | String | `'default'` | Colour: `default`, `primary`, `secondary`, `info`, `success`, `warning`, `danger`, `neutral`, `light`, `dark`, `link`, `facebook`, `twitter`, `google`, `github`, `linkedin` |
+| `size` | String | | `sm` or `lg` |
+| `round`, `simple`, `block`, `icon`, `link`, `social`, `wide` | Boolean | `false` | `btn-round`, `btn-simple`, `btn-block`, ... |
+| `tag` | String | `'button'` | Element to render, e.g. `a` |
+| `nativeType` | String | `'button'` | The `type` attribute (`submit`, `reset`) |
+
+Events: `click`. Slots: default, `label`, `labelRight`.
+
+### `FormGroupInput` (`<fg-input>`)
+
+A `.form-group` with a label, an input and optional icon addons. Supports
+`v-model`. `class` and `style` apply to the wrapper; all other attributes and
+listeners (`type`, `placeholder`, `@keydown`, ...) go to the `<input>`.
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `modelValue` | String, Number | `''` | `v-model` |
+| `label` | String | | |
+| `required` | Boolean | `false` | Adds `*` to the label |
+| `error` | String | | Shows the message and marks the field invalid |
+| `addonLeftIcon`, `addonRightIcon` | String | | Icon classes, e.g. `now-ui-icons ui-1_email-85` |
+| `labelClasses`, `inputClasses` | String | | Extra classes |
+
+Events: `update:modelValue`, `focus`, `blur`. Slots: default (replaces the
+input), `label`, `addonLeft`, `addonRight`, `infoBlock`, `helpBlock`.
+
+### `Card`
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `title`, `subTitle`, `description` | String | | Build the header |
+| `category` | String | | Small heading above everything |
+| `type` | String | | `card-{type}`, e.g. `login` |
+| `color` | String | | Theme background (`data-background-color`): `orange`, `blue`, `red`, `green`, `yellow`, `black`, `gray`, `secondary` |
+| `plain`, `raised` | Boolean | `false` | `card-plain`, `card-raised` |
+| `noFooterLine` | Boolean | `false` | No `<hr>` above the footer |
+| `headerClasses`, `cardBodyClasses` | String, Object, Array | | Extra classes |
+
+Slots: default (`.card-body`), `header`, `footer`, `category`, `image`,
+`avatar`, `info`, `raw-content` (inside the card, outside the body).
+
+### `Alert`
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `type` | String | `'default'` | `primary`, `secondary`, `info`, `success`, `warning`, `danger`, `light`, `dark` |
+| `dismissible` | Boolean | `false` | Show a close button |
+
+Events: `dismiss`. Slots: default, `dismiss-icon` (receives `{ dismiss }`).
+
+### `Navbar`
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `type` | String | `'white'` | Background: `white`, `default`, `primary`, `info`, `success`, `warning`, `danger`, `black` |
+| `position` | String | `'relative'` | `navbar-{position}`; `fixed` gives `fixed-top` |
+| `transparent` | Boolean | `false` | Transparent background |
+| `colorOnScroll` | Number | `0` | Stay transparent until scrolled this many pixels |
+| `expand` | String, Boolean | `'lg'` | Breakpoint the menu expands at; `false` never expands |
+| `menuClasses` | String, Object, Array | | Classes for the menu's `<ul class="navbar-nav">`, e.g. `ms-auto` |
+| `navMenuClasses` | String | `''` | Classes for the collapsing menu |
+| `menuImage` | String | | Background image for the mobile menu |
+
+Events: `open`, `close`. Slots: default (brand; receives
+`{ toggle, open, close, isToggled }`), `navbar-menu` (the `<li>` items; same
+slot props), `before-menu`, `after-menu`. Opening the menu adds `nav-open` to
+`<html>`.
+
+### `NavLink`
+
+A menu link: renders `<router-link>` when `to` is set, `<a>` otherwise, and
+closes the navbar menu and dropdown it is in when clicked.
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `to` | String, Object | | Route location |
+
+### `DropDown` (`<drop-down>`)
+
+| Prop | Type | Default | |
+|---|---|---|---|
+| `title`, `icon` | String | | Toggle text and icon classes |
+| `direction` | String | `'down'` | `down` or `up` |
+| `position` | String | | `right` aligns the menu to the right |
+| `hideArrow` | Boolean | `false` | No caret |
+| `tag` | String | `'li'` | Element to render (`li` fits in a navbar `<ul>`) |
+
+Events: `change` (open state). Slots: default (menu items), `title` (replaces
+the toggle). Closes on clicks outside it and when a `NavLink` inside is clicked.
+
+### `Parallax` (`<parallax>`)
+
+A `<div>` whose content moves at a third of the page's scroll speed (used for
+page-header images). Slot: default.
+
+### `NavbarToggleButton`
+
+The hamburger button used by `Navbar`. Prop: `toggled` (Boolean).
+
 ## How the styles are organised
 
 | Path | What |
@@ -93,5 +211,15 @@ Everything renders as it did on Bootstrap 4, except:
   positioning. Only Bootstrap's own JavaScript shows them, and it now produces
   Bootstrap 5 markup.
 
-The demo (`npm run demo`) shows every component and theme style.
+## Development
 
+```sh
+npm install
+npm test            # unit tests (Vitest)
+npm run demo        # demo (/) and docs (/docs.html) with hot reload
+npm run demo:build  # static build in demo/dist
+```
+
+The demo page (`demo/App.vue`) renders every component and theme style. It is
+also the reference for visual-regression checks, so add to it rather than
+rearranging it. The docs page is `demo/Docs.vue`.
