@@ -10,6 +10,18 @@ label {
   margin-bottom: .5rem;
 }
 
+small,
+.small {
+  font-weight: $font-weight-normal;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  color: revert;
+}
+
 // Bootstrap 5's reboot indents lists by 2rem; Bootstrap 4 left the browser's 40px.
 ol,
 ul {
@@ -27,6 +39,50 @@ ul {
 
 .navbar-brand {
   display: inline-block;
+}
+
+// Nav links: Bootstrap 4 gave them no colour of their own (they used the
+// theme's link colour) unless inside .navbar-light/.navbar-dark, which the kit
+// doesn't use. Bootstrap 5 colours them through these variables.
+.nav-link {
+  --bs-nav-link-color: #{$primary-color};
+  --bs-nav-link-hover-color: #{$primary-color};
+  --bs-navbar-active-color: #{$primary-color};
+  --bs-navbar-disabled-color: #6c757d;
+}
+
+// Dropdown menus: Bootstrap 5 only positions them when its JavaScript (Popper)
+// is in charge; the kit's DropDown component relies on the Bootstrap 4 rules.
+.dropdown-menu {
+  top: 100%;
+  left: 0;
+  float: left;
+  margin-top: .125rem;
+}
+
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+.navbar-nav .dropdown-menu {
+  float: none;
+}
+
+.dropup .dropdown-menu {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: .125rem;
+}
+
+.btn-group,
+.btn-group-vertical {
+  border-radius: 0;
+}
+
+.pagination {
+  border-radius: $border-radius;
 }
 
 // Bootstrap 5 gives every navbar the light-navbar toggler border and colour.
@@ -216,6 +272,13 @@ button.close {
   $yiq: ($r * 299 + $g * 587 + $b * 114) * .001;
 
   @return if($yiq >= 150, $gray-900, $white);
+}
+
+// The theme's own button colours (default, neutral) don't set Bootstrap 5's
+// state variables; keep their border colour on hover/active as Bootstrap 4 did.
+.btn {
+  --bs-btn-hover-border-color: currentcolor;
+  --bs-btn-active-border-color: currentcolor;
 }
 
 @each $name, $value in $theme-colors {

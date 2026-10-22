@@ -66,3 +66,16 @@ replaces Bootstrap 5's grid with Bootstrap 4's.
 
 In templates, use Bootstrap 5 utility names (`ms-auto`, `text-end`, ...) and the
 existing markup patterns (`form-group`, `btn-block`, `input-group-prepend`).
+
+### Differences from the original (Bootstrap 4) kit
+
+Everything renders as it did on Bootstrap 4, except:
+
+- `<navbar type="black">` is black. Bootstrap 4 had no `.bg-black`, so it was
+  transparent; Bootstrap 5's `.bg-black` utility makes it work as named.
+- Bootstrap popovers and tooltips use Bootstrap 5's markup and arrow
+  positioning. Only Bootstrap's own JavaScript shows them, and it now produces
+  Bootstrap 5 markup.
+
+The demo (`npm run demo`) shows every component and theme style.
+
