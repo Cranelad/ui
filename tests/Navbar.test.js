@@ -26,8 +26,11 @@ describe('NavbarToggleButton', () => {
     expect(w.element.tagName).toBe('BUTTON');
     expect(w.classes()).toEqual(['navbar-toggler', 'collapsed']);
     expect(w.findAll('.navbar-toggler-bar')).toHaveLength(3);
+    expect(w.attributes('aria-expanded')).toBe('false');
+    expect(w.attributes('aria-controls')).toBe('navigation');
     await w.setProps({ toggled: true });
     expect(w.classes()).toEqual(['navbar-toggler', 'toggled']);
+    expect(w.attributes('aria-expanded')).toBe('true');
   });
 });
 

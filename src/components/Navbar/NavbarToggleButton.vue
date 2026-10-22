@@ -2,22 +2,22 @@
   <button
     type="button"
     class="navbar-toggler"
-    :class="[{ toggled: toggled }, { collapsed: !toggled }]"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
+    :class="toggled ? 'toggled' : 'collapsed'"
+    aria-controls="navigation"
+    :aria-expanded="toggled"
     aria-label="Toggle navigation"
   >
-    <span class="navbar-toggler-bar top-bar"></span>
-    <span class="navbar-toggler-bar middle-bar"></span>
-    <span class="navbar-toggler-bar bottom-bar"></span>
+    <span class="navbar-toggler-bar top-bar" />
+    <span class="navbar-toggler-bar middle-bar" />
+    <span class="navbar-toggler-bar bottom-bar" />
   </button>
 </template>
-<script>
-export default {
-  name: 'navbar-toggle-button',
-  props: {
-    toggled: Boolean
-  }
-};
+
+<script setup>
+defineOptions({ name: 'navbar-toggle-button' });
+
+defineProps({
+  /** Whether the menu it controls is open. */
+  toggled: Boolean
+});
 </script>
-<style></style>
