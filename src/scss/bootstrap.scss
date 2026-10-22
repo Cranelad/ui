@@ -1,0 +1,313 @@
+// Bootstrap 5, configured to match the Bootstrap 4 defaults that the
+// Now UI Kit theme was designed against, so the site looks the same.
+
+@use "sass:color";
+
+// Colours: Bootstrap 5 changed several of these (e.g. primary #0d6efd).
+$blue:    #007bff;
+$indigo:  #6610f2;
+$purple:  #6f42c1;
+$pink:    #e83e8c;
+$red:     #dc3545;
+$orange:  #fd7e14;
+$yellow:  #ffc107;
+$green:   #28a745;
+$teal:    #20c997;
+$cyan:    #17a2b8;
+
+$primary: $blue;
+$success: $green;
+$info:    $cyan;
+
+// Links: Bootstrap 5 underlines links by default.
+$link-color: $blue;
+$link-decoration: none;
+$link-hover-color: #0056b3; // darken($blue, 15%)
+$link-hover-decoration: underline;
+
+// Bootstrap 5 rounds corners more.
+$border-radius: .25rem;
+$border-radius-sm: .2rem;
+$border-radius-lg: .3rem;
+
+// Typography
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$enable-rfs: false; // headings don't shrink on small screens in Bootstrap 4
+$small-font-size: 80%;
+$body-secondary-color: #6c757d; // .text-muted
+$hr-border-color: rgba(#000, .1);
+$hr-opacity: 1;
+
+// Grid: Bootstrap 5 uses 1.5rem gutters and adds an xxl (1400px) breakpoint
+// with a 1320px container.
+$grid-gutter-width: 30px;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+);
+$enable-grid-classes: false; // replaced by Bootstrap 4's grid below
+
+// Components
+$card-spacer-y: 1.25rem;
+$card-spacer-x: 1.25rem;
+$card-cap-padding-y: .75rem;
+$card-cap-padding-x: 1.25rem;
+$card-title-spacer-y: .75rem;
+$alert-padding-y: .75rem;
+$alert-padding-x: 1.25rem;
+$alert-dismissible-padding-r: 4rem;
+$navbar-padding-y: .5rem;
+$navbar-padding-x: 1rem;
+$nav-link-padding-y: .5rem;
+$nav-link-padding-x: 1rem;
+$input-btn-focus-width: .2rem;
+$input-color: #495057;
+$input-placeholder-color: #6c757d;
+$form-feedback-font-size: 80%;
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap4-grid";
+
+// ---------------------------------------------------------------------------
+// Bootstrap 4 behaviour that Bootstrap 5 removed or changed, which the theme
+// and templates rely on.
+// ---------------------------------------------------------------------------
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+// Bootstrap 5's reboot indents lists by 2rem; Bootstrap 4 left the browser's 40px.
+ol,
+ul {
+  padding-left: 40px;
+}
+
+// Cards set their own text colour in Bootstrap 5; in Bootstrap 4 they inherited it.
+.card {
+  color: inherit;
+}
+
+.card-body {
+  min-height: 1px;
+}
+
+.navbar-brand {
+  display: inline-block;
+}
+
+// Bootstrap 5 gives every navbar the light-navbar toggler border and colour.
+.navbar-toggler {
+  color: #000;
+  border-color: transparent;
+  border-radius: .25rem;
+}
+
+// While a .navbar-expand-* navbar is collapsed, Bootstrap 4 removed its
+// container's side padding.
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+  @if $infix != "" {
+    .navbar-expand#{$infix} {
+      @include media-breakpoint-down($breakpoint) {
+        > .container,
+        > .container-fluid {
+          padding-right: 0;
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.progress {
+  line-height: 0;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  height: calc(1.5em + .75rem + 2px);
+}
+
+// Bootstrap 5's .form-control removes the native dropdown arrow from selects
+// (it expects .form-select instead).
+select.form-control {
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
+}
+
+textarea.form-control,
+select.form-control[size],
+select.form-control[multiple] {
+  height: auto;
+}
+
+// Bootstrap 5 stops textareas being resized below one line.
+textarea.form-control {
+  min-height: 0;
+}
+
+.form-text {
+  display: block;
+}
+
+// Bootstrap 4's .form-text had no font size of its own, so the theme's
+// `small { font-size: 60% }` applied; Bootstrap 5's 80% would override it.
+small.form-text {
+  font-size: 60%;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+
+  + .btn-block {
+    margin-top: .5rem;
+  }
+}
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  &.btn-block {
+    width: 100%;
+  }
+}
+
+// Input group addons (e.g. the icons in the login fields).
+.input-group-prepend,
+.input-group-append {
+  display: flex;
+
+  .btn {
+    position: relative;
+    z-index: 2;
+
+    &:focus {
+      z-index: 3;
+    }
+  }
+
+  .btn + .btn,
+  .btn + .input-group-text,
+  .input-group-text + .input-group-text,
+  .input-group-text + .btn {
+    margin-left: -$input-border-width;
+  }
+}
+
+.input-group-prepend { margin-right: -$input-border-width; }
+.input-group-append { margin-left: -$input-border-width; }
+
+// Bootstrap 5 overlaps every non-first input-group child by a pixel; Bootstrap 4
+// only overlapped the addon (via its negative margin above), not the input too.
+.input-group > .input-group-prepend + .form-control {
+  margin-left: 0 !important;
+}
+
+.input-group > .input-group-prepend > .btn,
+.input-group > .input-group-prepend > .input-group-text,
+.input-group > .input-group-append:not(:last-child) > .btn,
+.input-group > .input-group-append:not(:last-child) > .input-group-text {
+  @include border-end-radius(0);
+}
+
+.input-group > .input-group-append > .btn,
+.input-group > .input-group-append > .input-group-text,
+.input-group > .input-group-prepend:not(:first-child) > .btn,
+.input-group > .input-group-prepend:not(:first-child) > .input-group-text {
+  @include border-start-radius(0);
+}
+
+// The dismiss "×" used by the vform alerts and the Alert component.
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+
+  &:hover {
+    color: #000;
+    text-decoration: none;
+  }
+
+  &:not(:disabled):not(.disabled):hover,
+  &:not(:disabled):not(.disabled):focus {
+    opacity: .75;
+  }
+}
+
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: $alert-padding-y $alert-padding-x;
+  color: inherit;
+}
+
+// Bootstrap 5 added a .text-black utility (#000, !important) that overrides the
+// theme's own .text-black ($light-black).
+.text-black {
+  color: #444 !important;
+}
+
+// Keyboard focus on nav links: Bootstrap 5 swaps the browser's focus ring for
+// a box-shadow glow; Bootstrap 4 left the browser's ring alone.
+.nav-link:focus-visible {
+  outline: revert;
+  box-shadow: none;
+}
+
+// Buttons: Bootstrap 4 picked text colour by YIQ brightness and always darkened
+// on hover/active; Bootstrap 5 uses a contrast ratio and lightens "light"
+// colours (including this primary blue) instead.
+@function bs4-color-yiq($color) {
+  $r: color.channel($color, "red", $space: rgb);
+  $g: color.channel($color, "green", $space: rgb);
+  $b: color.channel($color, "blue", $space: rgb);
+  $yiq: ($r * 299 + $g * 587 + $b * 114) * .001;
+
+  @return if($yiq >= 150, $gray-900, $white);
+}
+
+@each $name, $value in $theme-colors {
+  .btn-#{$name} {
+    @include button-variant(
+      $value,
+      $value,
+      $color: bs4-color-yiq($value),
+      $hover-background: color.adjust($value, $lightness: -7.5%),
+      $hover-border: color.adjust($value, $lightness: -10%),
+      $hover-color: bs4-color-yiq(color.adjust($value, $lightness: -7.5%)),
+      $active-background: color.adjust($value, $lightness: -10%),
+      $active-border: color.adjust($value, $lightness: -12.5%),
+      $active-color: bs4-color-yiq(color.adjust($value, $lightness: -10%)),
+      $disabled-color: bs4-color-yiq($value)
+    );
+  }
+}
