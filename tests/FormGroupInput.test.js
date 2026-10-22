@@ -86,6 +86,21 @@ describe('FormGroupInput (fg-input)', () => {
     expect(input.classes()).not.toContain('no-border');
   });
 
+  it('keeps attributes in sync when they change', async () => {
+    const w = mount(FormGroupInput, { attrs: { placeholder: 'One', class: 'a' } });
+    await w.setProps({ placeholder: 'Two', class: 'b' });
+    expect(w.find('input').attributes('placeholder')).toBe('Two');
+    expect(w.classes()).toContain('b');
+    expect(w.classes()).not.toContain('a');
+  });
+
+  it('passes listeners through to the input', async () => {
+    let keys = 0;
+    const w = mount(FormGroupInput, { attrs: { onKeydown: () => { keys++; } } });
+    await w.find('input').trigger('keydown');
+    expect(keys).toBe(1);
+  });
+
   it('applies inputClasses', () => {
     expect(mount(FormGroupInput, { props: { inputClasses: 'ic' } }).find('input').classes()).toContain('ic');
   });

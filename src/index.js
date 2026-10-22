@@ -2,7 +2,7 @@ import Alert from './components/Alert.vue';
 import Button from './components/Button.vue';
 import Card from './components/Card.vue';
 import DropDown from './components/Dropdown.vue';
-import FormGroupInput from './components/Inputs/formGroupInput.vue';
+import FormGroupInput from './components/FormGroupInput.vue';
 import Navbar from './components/Navbar/Navbar.vue';
 import NavbarToggleButton from './components/Navbar/NavbarToggleButton.vue';
 import NavLink from './components/Navbar/NavLink.vue';
