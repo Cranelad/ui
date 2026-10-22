@@ -38,6 +38,17 @@ describe('Parallax', () => {
     w.unmount();
   });
 
+  it('removes its scroll listener when unmounted', () => {
+    const add = vi.spyOn(window, 'addEventListener');
+    const remove = vi.spyOn(window, 'removeEventListener');
+    const w = mount(Parallax);
+    const handler = add.mock.calls.find(c => c[0] === 'scroll')[1];
+    w.unmount();
+    expect(remove).toHaveBeenCalledWith('scroll', handler);
+    add.mockRestore();
+    remove.mockRestore();
+  });
+
   it('is registered as parallax', () => {
     expect(Parallax.name).toBe('parallax');
   });

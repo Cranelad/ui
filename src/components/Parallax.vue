@@ -1,51 +1,35 @@
 <template>
-  <div :style="styles">
-    <slot></slot>
+  <div :style="style">
+    <slot />
   </div>
 </template>
-<script>
-function debounce(func, wait, immediate) {
-  let timeout;
-  return function() {
-    const context = this,
-      args = arguments;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    }, wait);
-    if (immediate && !timeout) func.apply(context, args);
-  };
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+
+defineOptions({ name: 'parallax' });
+
+// Moves its content at a third of the page's scroll speed.
+const style = ref({});
+let frame = null;
+
+function update() {
+  frame = null;
+  style.value = { transform: `translate3d(0, ${window.scrollY / 3}px,0)` };
 }
-export default {
-  name: 'parallax',
-  data() {
-    return {
-      styles: {},
-      debounceTimeout: 6
-    };
-  },
-  methods: {
-    handleScroll(scrollVal) {
-      let oVal = scrollVal / 3;
-      this.styles = {
-        transform: `translate3d(0, ${oVal}px,0)`
-      };
-    },
-    checkForParallax(scrollVal) {
-      let fn = debounce(
-        () => this.handleScroll(scrollVal),
-        this.debounceTimeout
-      );
-      fn();
-    }
-  },
-  mounted() {
-    let self = this;
-    window.addEventListener('scroll', function() {
-      let scrollVal = this.scrollY;
-      self.checkForParallax(scrollVal);
-    });
+
+function onScroll() {
+  if (frame === null) {
+    frame = requestAnimationFrame(update);
   }
-};
+}
+
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }));
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll);
+  if (frame !== null) {
+    cancelAnimationFrame(frame);
+  }
+});
 </script>
