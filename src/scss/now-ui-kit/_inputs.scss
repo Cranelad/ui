@@ -82,8 +82,7 @@
 .has-success,
 .has-danger{
     &:after{
-        font-family: 'Nucleo Outline';
-        content: "\ea22";
+        @include now-ui-icon('ui-1_check');
         display: inline-block;
         position: absolute;
         right: 20px;
@@ -102,7 +101,7 @@
 
 .has-danger{
     &:after{
-        content: "\ea53";
+        content: map-get($now-ui-icons, 'ui-1_simple-remove');
         color: $danger-color;
     }
 }

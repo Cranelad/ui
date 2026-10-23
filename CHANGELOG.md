@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Icons are now drawn with Tabler Icons (MIT) instead of the Nucleo font, under
+  the same `now-ui-icons` class names, sizes and positions. The font holds only
+  the kit's 100 icons (15 kB) and is built by `npm run build:icons` from
+  `scripts/icons.mjs`. New: `$now-ui-icons` Sass map and `now-ui-icon()` mixin.
+- Removed the Nucleo font and its license.
+
 ## 0.1.0
 
 First release: the Now UI Kit theme and components from the Cranelad website,

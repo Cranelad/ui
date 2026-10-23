@@ -220,6 +220,24 @@ the toggle). Closes on clicks outside it and when a `NavLink` inside is clicked.
 A `<div>` whose content moves at a third of the page's scroll speed (used for
 page-header images). Slot: default.
 
+### Icons
+
+`<i class="now-ui-icons ui-1_email-85"></i>`: the original Now UI Kit class
+names, drawn with [Tabler Icons](https://tabler.io/icons) (MIT). The 100
+available names and the Tabler icon used for each are in
+[`scripts/icons.mjs`](scripts/icons.mjs). Add `spin` to rotate an icon and
+`circle` for a round grey background.
+
+To use an icon from Sass (e.g. in a `::after`), use the mixin or the map:
+
+```scss
+.thing::after { @include now-ui-icon('ui-1_check'); }
+```
+
+To add an icon, add a line to `scripts/icons.mjs` and run
+`npm run build:icons`; it cuts Tabler's font down to the listed icons
+(about 15 kB) and regenerates `_icons.scss` and `_icon-map.scss`.
+
 ### `NavbarToggleButton`
 
 The hamburger button used by `Navbar`. Prop: `toggled` (Boolean).

@@ -41,8 +41,7 @@
 }
 
  .form-check .form-check-sign::after{
-  font-family: 'Nucleo Outline';
-  content: "\ea22";
+  @include now-ui-icon('ui-1_check');
   top: 0px;
   text-align: center;
   font-size: 14px;
