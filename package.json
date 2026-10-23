@@ -7,9 +7,6 @@
     "type": "git",
     "url": "git+ssh://git@github.com/Cranelad/ui.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "type": "module",
   "sideEffects": [
     "*.css",

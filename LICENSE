@@ -1,8 +1,12 @@
-@cranelad/ui is an internal Cranelad package. It is not licensed for use
-outside Cranelad projects.
+Copyright (c) 2026 Cranelad. All rights reserved.
 
-It is based on third-party work whose licenses are reproduced below and
-continue to apply to those portions.
+@cranelad/ui is Cranelad's internal UI kit. Its source is published so that
+Cranelad projects can install it, but it is licensed only for use in Cranelad
+projects: no permission is granted to use, copy, modify or distribute it
+outside them.
+
+It includes third-party work under the licenses reproduced below. Those
+licenses continue to apply to those portions.
 
 -------------------------------------------------------------------------------
 Vue Now UI Kit (components and theme in src/components and src/scss/now-ui-kit)

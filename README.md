@@ -14,33 +14,21 @@ The package ships source (`.vue` and `.scss`), so the consuming project needs:
 
 ## Install
 
-The package is published privately to GitHub Packages, so installing it needs
-a GitHub token with the `read:packages` scope from someone with access to the
-Cranelad organisation.
+Install a tagged release straight from GitHub; no token or npm account needed:
 
-1. Tell npm where `@cranelad` packages live, in the project's `.npmrc`
-   (commit this file):
+```sh
+npm install "github:Cranelad/ui#semver:^0.2.0"
+```
 
-   ```ini
-   @cranelad:registry=https://npm.pkg.github.com
-   ```
+which adds this to `package.json`:
 
-2. Give npm the token, once per machine (developer or server), in the user's
-   own `~/.npmrc`. Never commit a token to a project.
+```json
+"@cranelad/ui": "github:Cranelad/ui#semver:^0.2.0"
+```
 
-   ```sh
-   npm config set //npm.pkg.github.com/:_authToken <token>
-   ```
-
-   In CI, set it from a secret instead, e.g. GitHub Actions'
-   `actions/setup-node` with `registry-url: https://npm.pkg.github.com` and
-   `NODE_AUTH_TOKEN`.
-
-3. Install:
-
-   ```sh
-   npm install @cranelad/ui
-   ```
+npm picks the newest release tag matching the range (`v0.2.x` here). Update
+the range to move to a new minor or major version. Requires `git` on the
+machine running `npm install`.
 
 ### Working on the kit alongside a project
 
@@ -63,8 +51,8 @@ export default defineConfig({
 ```
 
 Vite's dev server doesn't watch a linked package for changes: restart it after
-changing the kit's SCSS. Switch back to the published version before
-deploying, since the server won't have `../ui`.
+changing the kit's SCSS. Switch back to the GitHub release before deploying,
+since the server won't have `../ui`.
 
 ## Use
 
@@ -297,8 +285,6 @@ rearranging it. The docs page is `demo/Docs.vue`.
    git push --follow-tags
    ```
 
-The tag starts the Publish workflow (`.github/workflows/publish.yml`), which
-checks the tag matches `package.json`, runs the tests and the demo build, and
-publishes to GitHub Packages. The Test workflow runs on every push to `main` and
-on pull requests.
-
+Projects pick the release up on their next `npm install`/`npm update` (within
+their semver range). The Test workflow (`.github/workflows/test.yml`) runs the
+tests and the demo build on every push to `main` and on pull requests.
