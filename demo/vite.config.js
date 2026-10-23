@@ -2,8 +2,9 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// Kitchen-sink demo of every component and theme style in the kit. It imports
-// the kit by its package name, the same way a consuming project would.
+// Kitchen-sink demo of every component and theme style in the kit (index.html)
+// and the docs page (docs.html). Both import the kit by its package name, the
+// same way a consuming project would.
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
   base: './',
@@ -26,5 +27,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        demo: fileURLToPath(new URL('./index.html', import.meta.url)),
+        docs: fileURLToPath(new URL('./docs.html', import.meta.url)),
+      },
+    },
   },
 })

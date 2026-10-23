@@ -153,6 +153,15 @@ Events: `open`, `close`. Slots: default (brand; receives
 slot props), `before-menu`, `after-menu`. Opening the menu adds `nav-open` to
 `<html>`.
 
+On small screens the theme only styles the navbar (hamburger button, collapsing
+menu) inside `<body class="sidebar-collapse">`: add that class to `<body>`, for
+example from the app's layout component. (`bootstrap-collapse` gives the
+plainer Bootstrap-style menu instead.)
+
+Use one collapsible navbar per page: opening a navbar's mobile menu adds
+`nav-open` to `<html>`, and the theme slides in every navbar's menu on that
+class.
+
 ### `NavLink`
 
 A menu link: renders `<router-link>` when `to` is set, `<a>` otherwise, and
