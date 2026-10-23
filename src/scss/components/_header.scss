@@ -1,40 +1,39 @@
-// Site header: a Bootstrap navbar on the brand blue.
+// Site header: a black navbar fixed to the top, with a blue line under it.
 //
-//   <header class="site-header">
-//     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">...
+//   <header class="site-header fixed-top">
+//     <nav class="navbar navbar-expand-lg" data-bs-theme="dark">...
 
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: $zindex-sticky;
+  background-color: $body-bg;
+  border-bottom: 3px solid $primary;
 
-  .navbar {
-    min-height: 5rem;
+  .navbar-brand,
+  .nav-link {
+    font-size: $font-size-base;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
   .navbar-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: .625rem;
-    font-family: $font-family-heading;
-    font-weight: 600;
-    letter-spacing: -.01em;
+    font-weight: 700;
+  }
 
-    img {
-      width: 2.25rem;
-      height: 2.25rem;
-      border-radius: $border-radius-sm;
+  .navbar-toggler {
+    border: 0;
+
+    &:focus {
+      box-shadow: none;
     }
   }
 
-  .nav-link {
-    font-weight: 500;
-  }
-
-  // Collapsed (mobile) menu: a little breathing room under the bar.
+  // Collapsed (mobile) menu: white links, a little breathing room.
   @include media-breakpoint-down(lg) {
     .navbar-collapse {
-      padding: .5rem 0 1rem;
+      padding: .5rem 0;
+    }
+
+    .nav-link {
+      color: #fff;
     }
   }
 }

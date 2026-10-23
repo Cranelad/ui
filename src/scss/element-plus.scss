@@ -14,5 +14,5 @@
   --el-color-primary-dark-2: #{mix(#000, $primary, 20%)};
   --el-font-family: #{inspect($font-family-sans-serif)};
   --el-border-radius-base: #{$border-radius};
-  --el-text-color-primary: #{$body-color};
+  --el-text-color-primary: #{$card-color};  // Element Plus sits on light cards
 }

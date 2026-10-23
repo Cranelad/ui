@@ -1,4 +1,4 @@
-// Base typography and helpers.
+// Base typography and form details.
 
 html {
   scroll-behavior: smooth;
@@ -9,24 +9,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, .h1, .h2, .h3 {
-  letter-spacing: -.01em;
-}
-
-// Large serif display lines, e.g. the mission statement.
-.display-serif {
-  font-family: $font-family-display;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: $headings-color;
-}
-
-// Small label above a heading ("Our mission").
-.eyebrow {
-  display: block;
-  margin-bottom: .75rem;
-  font-size: 1.125rem;
-  color: $text-muted-color;
+// Textareas are a plain underline rather than a pill.
+textarea.form-control {
+  max-height: 10rem;
+  padding: .625rem 1.125rem;
+  border-width: 0 0 1px;
+  border-radius: 0;
+  resize: none;
 }
 
 // Text link with an arrow that nudges on hover.
@@ -34,7 +23,7 @@ h1, h2, h3, .h1, .h2, .h3 {
   display: inline-flex;
   align-items: center;
   gap: .375rem;
-  font-weight: 500;
+  font-weight: 600;
 
   .ti {
     transition: transform .2s ease;
@@ -47,4 +36,38 @@ h1, h2, h3, .h1, .h2, .h3 {
       transform: translateX(.25rem);
     }
   }
+}
+
+// Outline button for the blue cards: the card's text colour on a light border.
+.btn-ghost {
+  --#{$prefix}btn-color: inherit;
+  --#{$prefix}btn-border-color: #{rgba(#fff, .7)};
+  --#{$prefix}btn-hover-color: inherit;
+  --#{$prefix}btn-hover-bg: #{rgba(#fff, .2)};
+  --#{$prefix}btn-hover-border-color: #fff;
+  --#{$prefix}btn-active-color: inherit;
+  --#{$prefix}btn-active-bg: #{rgba(#fff, .3)};
+  --#{$prefix}btn-active-border-color: #fff;
+}
+
+// Input groups: the icon sits inside the pill, sharing its border.
+.input-group-text {
+  color: inherit;
+  background-color: transparent;
+  border-color: currentcolor;
+  border-radius: $input-border-radius;
+}
+
+.input-group > .input-group-text + .form-control {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.input-group > .input-group-text:has(+ .form-control) {
+  padding-right: .75rem;
+  border-right: 0;
+}
+
+.input-group:focus-within > * {
+  border-color: $input-focus-border-color;
 }

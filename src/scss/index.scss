@@ -2,21 +2,16 @@
 //
 // Everything is standard Bootstrap 5, styled through its variables
 // (_variables.scss). components/ adds only the site-level pieces Bootstrap
-// doesn't have: header, footer, hero, sections, decorative shapes, feature and
-// value cards, timeline.
+// doesn't have: header, footer, sections, timeline.
 
 @import "variables";
 @import "bootstrap/scss/bootstrap";
 
-@import "fonts";
 @import "icon-map";
 @import "icons";
 
 @import "components/base";
 @import "components/header";
 @import "components/footer";
-@import "components/decor";
-@import "components/hero";
 @import "components/sections";
-@import "components/cards";
 @import "components/timeline";
