@@ -1,6 +1,13 @@
-// @cranelad/ui design tokens: the theme's variables and mixins, with no CSS
-// output. Import this in a project's own Sass to use $primary-color,
-// @include linear-gradient(...) etc. without compiling the kit a second time.
+// @cranelad/ui design tokens (@cranelad/ui/tokens.scss): the theme's variables,
+// Bootstrap's functions, variables and mixins, and the icon map, with no CSS
+// output. Import this in a project's own Sass to use $primary,
+// media-breakpoint-up(), @include icon('check') and so on without compiling
+// the kit a second time.
 
-@import "now-ui-kit/variables";
-@import "now-ui-kit/mixins";
+@import "variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "icon-map";

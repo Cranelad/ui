@@ -1,0 +1,40 @@
+// Site header: a Bootstrap navbar on the brand blue.
+//
+//   <header class="site-header">
+//     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">...
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: $zindex-sticky;
+
+  .navbar {
+    min-height: 5rem;
+  }
+
+  .navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .625rem;
+    font-family: $font-family-heading;
+    font-weight: 600;
+    letter-spacing: -.01em;
+
+    img {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: $border-radius-sm;
+    }
+  }
+
+  .nav-link {
+    font-weight: 500;
+  }
+
+  // Collapsed (mobile) menu: a little breathing room under the bar.
+  @include media-breakpoint-down(lg) {
+    .navbar-collapse {
+      padding: .5rem 0 1rem;
+    }
+  }
+}

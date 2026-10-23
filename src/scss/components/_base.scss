@@ -1,0 +1,50 @@
+// Base typography and helpers.
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .h1, .h2, .h3 {
+  letter-spacing: -.01em;
+}
+
+// Large serif display lines, e.g. the mission statement.
+.display-serif {
+  font-family: $font-family-display;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: $headings-color;
+}
+
+// Small label above a heading ("Our mission").
+.eyebrow {
+  display: block;
+  margin-bottom: .75rem;
+  font-size: 1.125rem;
+  color: $text-muted-color;
+}
+
+// Text link with an arrow that nudges on hover.
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  font-weight: 500;
+
+  .ti {
+    transition: transform .2s ease;
+  }
+
+  &:hover {
+    text-decoration: none;
+
+    .ti {
+      transform: translateX(.25rem);
+    }
+  }
+}

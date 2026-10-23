@@ -1,0 +1,79 @@
+// Cranelad design tokens, as Bootstrap 5 variables. Imported before Bootstrap.
+
+// Colours
+$brand: #0cb2f0;     // the logo's blue: accents, highlights, gradients
+$primary: #0a74b3;   // deeper brand blue: white text on it passes WCAG AA (5:1)
+$info: $brand;
+
+$body-color: #333;
+$body-bg: #fbfcfe;
+$headings-color: #1f2a37;
+$text-muted-color: #5b6470;
+$body-secondary-color: $text-muted-color;
+
+// Soft gradient shapes behind sections
+$decor-colors: (
+  'blue': (#cfe3ff, #eaf3ff),
+  'mint': (#b4efe3, #e4fbf6),
+  'yellow': (#fbe3a1, #fff6dd),
+);
+
+// Typography
+$font-family-sans-serif: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-family-heading: 'Outfit', $font-family-sans-serif;
+$font-family-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+
+$font-size-base: 1rem;
+$line-height-base: 1.6;
+$headings-font-family: $font-family-heading;
+$headings-font-weight: 600;
+$headings-line-height: 1.2;
+$lead-font-size: 1.25rem;
+$lead-font-weight: 400;
+
+// Links
+$link-color: $primary;
+$link-decoration: none;
+$link-hover-decoration: underline;
+
+// Shape
+$border-radius: .5rem;
+$border-radius-sm: .375rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.5rem;
+$border-radius-xxl: 2.5rem;
+
+$box-shadow: 0 .75rem 2rem rgba(16, 42, 82, .07);
+$box-shadow-sm: 0 .25rem .75rem rgba(16, 42, 82, .06);
+$box-shadow-lg: 0 1.5rem 3.5rem rgba(16, 42, 82, .12);
+
+// Layout
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1200px
+);
+
+// Components
+$btn-padding-y: .625rem;
+$btn-padding-x: 1.25rem;
+$btn-font-weight: 500;
+$btn-padding-y-lg: .875rem;
+$btn-padding-x-lg: 1.75rem;
+
+$input-padding-y: .625rem;
+$input-padding-x: 1rem;
+
+$card-border-color: rgba(16, 42, 82, .08);
+$card-border-radius: $border-radius-xl;
+$card-spacer-y: 1.75rem;
+$card-spacer-x: 1.75rem;
+
+$navbar-padding-y: 1rem;
+$navbar-brand-font-size: 1.5rem;
+$navbar-nav-link-padding-x: 1rem;
+$navbar-dark-color: rgba(#fff, .9);
+$navbar-dark-hover-color: #fff;
+$navbar-dark-active-color: #fff;

@@ -1,0 +1,35 @@
+// Soft gradient circles drifting behind the page's sections.
+//
+//   <div class="decor" aria-hidden="true">
+//     <span class="decor-blob decor-blob-blue" style="--size: 40rem; top: -10rem; left: -12rem"></span>
+//   </div>
+//
+// Put .decor as the first child of a positioned wrapper (e.g. .decor-host);
+// blobs sit behind the content and never cause horizontal scrolling.
+
+.decor-host {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.decor-blob {
+  position: absolute;
+  width: var(--size, 32rem);
+  height: var(--size, 32rem);
+  border-radius: 50%;
+  opacity: .8;
+}
+
+@each $name, $stops in $decor-colors {
+  .decor-blob-#{$name} {
+    background: linear-gradient(135deg, nth($stops, 1), nth($stops, 2) 70%, rgba(nth($stops, 2), 0));
+  }
+}

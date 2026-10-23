@@ -1,0 +1,125 @@
+// Feature cards (one per service or platform) and the value card.
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid $card-border-color;
+  border-radius: $border-radius-xl;
+  box-shadow: $box-shadow-sm;
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover {
+    box-shadow: $box-shadow;
+    transform: translateY(-3px);
+  }
+
+  h3 {
+    margin-bottom: .75rem;
+    font-size: 1.375rem;
+  }
+
+  p {
+    color: $text-muted-color;
+  }
+
+  .link-arrow {
+    margin-top: auto;
+  }
+}
+
+// Round tinted icon at the top of a card.
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  color: $primary;
+  background: rgba($brand, .12);
+  border-radius: 50%;
+}
+
+// Value card: one value at a time, with previous/next arrows.
+.value-card {
+  overflow: hidden;
+  background: #fff;
+  border-radius: $border-radius-xl;
+  box-shadow: $box-shadow;
+}
+
+.value-card-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 11rem;
+  font-size: 4rem;
+  color: #fff;
+  background: linear-gradient(135deg, $primary, $brand);
+}
+
+.value-card-body {
+  padding: 2rem 2.25rem 2.25rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.625rem;
+  }
+
+  ul {
+    padding-left: 1.125rem;
+    margin: 1.25rem 0 0;
+    color: $text-muted-color;
+  }
+
+  li + li {
+    margin-top: .5rem;
+  }
+}
+
+.value-card-nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    font-size: 1.5rem;
+    color: $primary;
+    background: none;
+    border: 0;
+    border-radius: 50%;
+
+    &:hover {
+      background: rgba($brand, .12);
+    }
+  }
+}
+
+.value-card-dots {
+  display: flex;
+  gap: .5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+
+  span {
+    width: .5rem;
+    height: .5rem;
+    background: rgba($primary, .25);
+    border-radius: 50%;
+
+    &.active {
+      background: $primary;
+    }
+  }
+}

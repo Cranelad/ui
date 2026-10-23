@@ -1,14 +1,18 @@
-// @cranelad/ui with styles for Element Plus components (inputs and selects,
-// date pickers, carousel), exported as @cranelad/ui/style-element-plus.scss.
-// Use it instead of style.scss in projects that use Element Plus.
-//
-// These styles @extend the kit's classes (.form-control, .btn-round, ...), so
-// they are compiled together with the whole kit rather than as a separate file.
+// @cranelad/ui for projects that also use Element Plus
+// (@cranelad/ui/style-element-plus.scss): the kit, plus Element Plus's theme
+// variables set to the Cranelad colours, font and radii so its components match.
 
 @import "index";
 
-@import "now-ui-kit/element-plus/carousel";
-@import "now-ui-kit/element-plus/date_picker";
-@import "now-ui-kit/element-plus/input";
-// @import "now-ui-kit/element-plus/tooltip";
-// @import "now-ui-kit/element-plus/popover";
+:root {
+  --el-color-primary: #{$primary};
+  --el-color-primary-light-3: #{mix(#fff, $primary, 30%)};
+  --el-color-primary-light-5: #{mix(#fff, $primary, 50%)};
+  --el-color-primary-light-7: #{mix(#fff, $primary, 70%)};
+  --el-color-primary-light-8: #{mix(#fff, $primary, 80%)};
+  --el-color-primary-light-9: #{mix(#fff, $primary, 90%)};
+  --el-color-primary-dark-2: #{mix(#000, $primary, 20%)};
+  --el-font-family: #{inspect($font-family-sans-serif)};
+  --el-border-radius-base: #{$border-radius};
+  --el-text-color-primary: #{$body-color};
+}

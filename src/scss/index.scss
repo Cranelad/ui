@@ -1,19 +1,22 @@
-// @cranelad/ui: the complete stylesheet (Bootstrap 5 + the Now UI Kit theme).
+// @cranelad/ui: Bootstrap 5 with the Cranelad theme (@cranelad/ui/style.scss).
 //
-// Order matters: kit/ holds the kit's own component styles on top of Bootstrap
-// (largely Bootstrap 4 behaviour the theme was built on), and the theme comes
-// last so it overrides both.
+// Everything is standard Bootstrap 5, styled through its variables
+// (_variables.scss). components/ adds only the site-level pieces Bootstrap
+// doesn't have: header, footer, hero, sections, decorative shapes, feature and
+// value cards, timeline.
 
-@import "now-ui-kit/variables"; // the theme's design tokens, used by the config
-@import "config";
+@import "variables";
 @import "bootstrap/scss/bootstrap";
-@import "kit/reboot";
-@import "kit/grid";
-@import "kit/cards";
-@import "kit/navs";
-@import "kit/dropdowns";
-@import "kit/forms";
-@import "kit/buttons";
-@import "kit/alerts";
-@import "kit/misc";
-@import "now-ui-kit";
+
+@import "fonts";
+@import "icon-map";
+@import "icons";
+
+@import "components/base";
+@import "components/header";
+@import "components/footer";
+@import "components/decor";
+@import "components/hero";
+@import "components/sections";
+@import "components/cards";
+@import "components/timeline";
