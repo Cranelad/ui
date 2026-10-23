@@ -14,14 +14,44 @@ The package ships source (`.vue` and `.scss`), so the consuming project needs:
 
 ## Install
 
-Until the package is published, link it from a local checkout:
+The package is published privately to GitHub Packages, so installing it needs
+a GitHub token with the `read:packages` scope from someone with access to the
+Cranelad organisation.
+
+1. Tell npm where `@cranelad` packages live, in the project's `.npmrc`
+   (commit this file):
+
+   ```ini
+   @cranelad:registry=https://npm.pkg.github.com
+   ```
+
+2. Give npm the token, once per machine (developer or server), in the user's
+   own `~/.npmrc`. Never commit a token to a project.
+
+   ```sh
+   npm config set //npm.pkg.github.com/:_authToken <token>
+   ```
+
+   In CI, set it from a secret instead, e.g. GitHub Actions'
+   `actions/setup-node` with `registry-url: https://npm.pkg.github.com` and
+   `NODE_AUTH_TOKEN`.
+
+3. Install:
+
+   ```sh
+   npm install @cranelad/ui
+   ```
+
+### Working on the kit alongside a project
+
+To try unreleased changes, link a local checkout instead:
 
 ```sh
 npm install ../ui        # adds "@cranelad/ui": "file:../ui"
 ```
 
-When linking locally, add this to the project's `vite.config.js` so the app and
-the package share one copy of Vue, and Vite's dev server may read the package:
+and add this to the project's `vite.config.js` so the app and the package
+share one copy of Vue, and Vite's dev server may read the package:
 
 ```js
 import { searchForWorkspaceRoot } from 'vite'
@@ -33,7 +63,8 @@ export default defineConfig({
 ```
 
 Vite's dev server doesn't watch a linked package for changes: restart it after
-changing the kit's SCSS.
+changing the kit's SCSS. Switch back to the published version before
+deploying, since the server won't have `../ui`.
 
 ## Use
 
@@ -232,3 +263,24 @@ npm run demo:build  # static build in demo/dist
 The demo page (`demo/App.vue`) renders every component and theme style. It is
 also the reference for visual-regression checks, so add to it rather than
 rearranging it. The docs page is `demo/Docs.vue`.
+
+## Releasing
+
+1. Note the changes in `CHANGELOG.md`.
+2. Bump the version; this commits it and creates a matching tag:
+
+   ```sh
+   npm version patch   # or minor / major
+   ```
+
+3. Push the commit and the tag:
+
+   ```sh
+   git push --follow-tags
+   ```
+
+The tag starts the Publish workflow (`.github/workflows/publish.yml`), which
+checks the tag matches `package.json`, runs the tests and the demo build, and
+publishes to GitHub Packages. The Test workflow runs on every push to `main` and
+on pull requests.
+
