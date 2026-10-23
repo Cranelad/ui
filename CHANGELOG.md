@@ -6,7 +6,7 @@
   blue #2196f3 headings and links, a blue line under the header, blue
   `.text-bg-info` cards, pill-shaped inputs and buttons) set through Bootstrap's
   own variables, plus a few site pieces: `.site-header`, `.site-footer`,
-  `.section`, `.timeline`, `.btn-ghost`, `.link-arrow`.
+  `.section`, `.btn-ghost`, `.link-arrow`.
 - Icons use Tabler's own class names: `<i class="ti ti-mail"></i>`.
 
 ## 0.2.0
