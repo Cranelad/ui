@@ -4,7 +4,7 @@
 
 - The repository is public so projects can install from GitHub without a token
   (`github:Cranelad/ui#semver:^0.2.0`). The license still limits use to
-  Cranelad projects. No longer published to GitHub Packages.
+  Cranelad projects. Also published to GitHub Packages, as before.
 - Icons are now drawn with Tabler Icons (MIT) instead of the Nucleo font, under
   the same `now-ui-icons` class names, sizes and positions. The font holds only
   the kit's 100 icons (15 kB) and is built by `npm run build:icons` from

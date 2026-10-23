@@ -30,6 +30,16 @@ npm picks the newest release tag matching the range (`v0.2.x` here). Update
 the range to move to a new minor or major version. Requires `git` on the
 machine running `npm install`.
 
+### Or from GitHub Packages
+
+Each release is also published to GitHub Packages. Installing from there needs
+a GitHub personal access token (classic) with `read:packages` on every machine,
+even though the package is public, so the GitHub install above is simpler. To
+use it anyway, add `@cranelad:registry=https://npm.pkg.github.com` to the
+project's `.npmrc`, put the token in your own `~/.npmrc`
+(`npm config set //npm.pkg.github.com/:_authToken <token>`), then
+`npm install @cranelad/ui`.
+
 ### Working on the kit alongside a project
 
 To try unreleased changes, link a local checkout instead:
@@ -285,6 +295,8 @@ rearranging it. The docs page is `demo/Docs.vue`.
    git push --follow-tags
    ```
 
-Projects pick the release up on their next `npm install`/`npm update` (within
-their semver range). The Test workflow (`.github/workflows/test.yml`) runs the
-tests and the demo build on every push to `main` and on pull requests.
+Projects installing from GitHub pick the release up on their next
+`npm install`/`npm update` (within their semver range). The tag also starts the
+Publish workflow (`.github/workflows/publish.yml`), which checks the tag matches
+`package.json`, runs the tests and the demo build, and publishes to GitHub
+Packages. The Test workflow runs on every push to `main` and on pull requests.
