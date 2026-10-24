@@ -71,3 +71,28 @@ textarea.form-control {
 .input-group:focus-within > * {
   border-color: $input-focus-border-color;
 }
+
+// Square (or round, with .rounded-pill) button holding just an icon.
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.375rem;
+  height: 2.375rem;
+  padding: 0;
+
+  &.btn-sm {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
+
+  &.btn-lg {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+}
+
+// Spinner next to a loading button's label.
+.btn > .spinner-border {
+  margin-right: .5rem;
+}

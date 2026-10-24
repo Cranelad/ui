@@ -2,7 +2,7 @@
 //
 // Everything is standard Bootstrap 5, styled through its variables
 // (_variables.scss). components/ adds only the site-level pieces Bootstrap
-// doesn't have: header, footer, sections.
+// doesn't have: header, footer, sections, and light colours inside white cards.
 
 @import "variables";
 @import "bootstrap/scss/bootstrap";
@@ -14,3 +14,4 @@
 @import "components/header";
 @import "components/footer";
 @import "components/sections";
+@import "components/cards";

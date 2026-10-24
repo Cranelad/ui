@@ -9,7 +9,7 @@ It includes third-party work under the licenses reproduced below. Those
 licenses continue to apply to those portions.
 
 -------------------------------------------------------------------------------
-Vue Now UI Kit (components and theme in src/components and src/scss/now-ui-kit)
+Vue Now UI Kit (the components in src/components are derived from it)
 -------------------------------------------------------------------------------
 
 MIT License

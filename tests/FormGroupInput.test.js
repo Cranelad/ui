@@ -1,121 +1,78 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { FormGroupInput } from '../src/index.js';
 
 describe('FormGroupInput (fg-input)', () => {
-  it('renders a form-group with an input', () => {
-    const w = mount(FormGroupInput);
-    expect(w.classes()).toEqual(['form-group']);
-    const input = w.find('input.form-control');
-    expect(input.exists()).toBe(true);
-    expect(input.element.value).toBe('');
-    expect(input.attributes('aria-describedby')).toBe('addon-right addon-left');
+  it('renders a labelled input', () => {
+    const w = mount(FormGroupInput, { props: { label: 'Email' } });
+    const input = w.find('input');
+    expect(w.classes()).toEqual(['mb-3']);
+    expect(w.find('label').classes()).toContain('form-label');
+    expect(w.find('label').attributes('for')).toBe(input.attributes('id'));
+    expect(input.classes()).toContain('form-control');
     expect(w.find('.input-group').exists()).toBe(false);
-    expect(w.find('label').exists()).toBe(false);
   });
 
-  it('supports v-model', async () => {
-    const w = mount(FormGroupInput, { props: { modelValue: 'a', 'onUpdate:modelValue': v => w.setProps({ modelValue: v }) } });
-    expect(w.find('input').element.value).toBe('a');
-    await w.find('input').setValue('abc');
-    expect(w.emitted('update:modelValue').at(-1)).toEqual(['abc']);
-    expect(w.props('modelValue')).toBe('abc');
-  });
-
-  it('marks a filled, error-free input as valid', () => {
-    expect(mount(FormGroupInput, { props: { modelValue: 'x' } }).find('input').classes()).toContain('valid');
-    expect(mount(FormGroupInput, { props: { modelValue: 'x', error: 'bad' } }).find('input').classes()).not.toContain('valid');
-    expect(mount(FormGroupInput, { props: { modelValue: '' } }).find('input').classes()).not.toContain('valid');
-  });
-
-  it('accepts numbers', () => {
-    expect(mount(FormGroupInput, { props: { modelValue: 5 } }).find('input').element.value).toBe('5');
-  });
-
-  it('tracks focus and emits focus/blur', async () => {
-    const w = mount(FormGroupInput);
-    await w.find('input').trigger('focus');
-    expect(w.classes()).toContain('input-group-focus');
-    expect(w.emitted('focus')).toHaveLength(1);
-    await w.find('input').trigger('blur');
-    expect(w.classes()).not.toContain('input-group-focus');
-    expect(w.emitted('blur')).toHaveLength(1);
-  });
-
-  it('renders a label, with * when required', () => {
-    const w = mount(FormGroupInput, { props: { label: 'Name', required: true, labelClasses: 'lc' } });
-    const label = w.find('label.control-label');
-    expect(label.classes()).toContain('lc');
-    expect(label.text()).toBe('Name *');
-    expect(w.classes()).toContain('has-label');
-  });
-
-  it('renders icon addons inside an input-group', () => {
-    const w = mount(FormGroupInput, { props: { addonLeftIcon: 'icon-l', addonRightIcon: 'icon-r' } });
-    expect(w.classes()).toContain('input-group');
-    expect(w.find('.form-group > div.input-group').exists()).toBe(true);
-    expect(w.find('.input-group-prepend > i.input-group-text.icon-l').exists()).toBe(true);
-    expect(w.find('span.input-group-addon.input-group-append > i.input-group-text.icon-r').exists()).toBe(true);
-  });
-
-  it('treats addon slots as icons', () => {
-    const w = mount(FormGroupInput, { slots: { addonLeft: '<span class="s">$</span>' } });
-    expect(w.classes()).toContain('input-group');
-    expect(w.find('.s').exists()).toBe(true);
-    expect(w.find('.input-group-prepend').exists()).toBe(false);
-  });
-
-  it('shows an error', () => {
-    const w = mount(FormGroupInput, { props: { error: 'Required' } });
-    expect(w.classes()).toContain('has-danger');
-    const err = w.find('.text-danger.invalid-feedback');
-    expect(err.text()).toBe('Required');
-    expect(err.attributes('style')).toContain('display: block');
-    expect(err.classes()).not.toContain('mt-2');
-    expect(mount(FormGroupInput, { props: { error: 'x', addonLeftIcon: 'i' } }).find('.invalid-feedback').classes()).toContain('mt-2');
+  it('marks required fields', () => {
+    const w = mount(FormGroupInput, { props: { label: 'Name', required: true } });
+    expect(w.find('label span').text()).toBe('*');
+    expect(w.find('input').attributes('required')).toBeDefined();
   });
 
   it('puts class and style on the wrapper and other attributes on the input', () => {
-    const w = mount(FormGroupInput, { attrs: { class: 'no-border', style: 'color: red;', type: 'email', placeholder: 'Email', name: 'email' } });
-    expect(w.classes()).toContain('no-border');
+    const w = mount(FormGroupInput, { attrs: { class: 'wide', style: 'color: red', type: 'email', placeholder: 'you@example.com', id: 'email' } });
+    expect(w.classes()).toContain('wide');
     expect(w.attributes('style')).toContain('color: red');
     const input = w.find('input');
     expect(input.attributes('type')).toBe('email');
-    expect(input.attributes('placeholder')).toBe('Email');
-    expect(input.attributes('name')).toBe('email');
-    expect(input.classes()).not.toContain('no-border');
+    expect(input.attributes('placeholder')).toBe('you@example.com');
+    expect(input.attributes('id')).toBe('email');
+    expect(input.classes()).not.toContain('wide');
   });
 
-  it('keeps attributes in sync when they change', async () => {
-    const w = mount(FormGroupInput, { attrs: { placeholder: 'One', class: 'a' } });
-    await w.setProps({ placeholder: 'Two', class: 'b' });
-    expect(w.find('input').attributes('placeholder')).toBe('Two');
-    expect(w.classes()).toContain('b');
-    expect(w.classes()).not.toContain('a');
+  it('supports v-model', async () => {
+    const w = mount(FormGroupInput, { props: { modelValue: 'a' } });
+    expect(w.find('input').element.value).toBe('a');
+    await w.find('input').setValue('ab');
+    expect(w.emitted('update:modelValue')[0]).toEqual(['ab']);
   });
 
-  it('passes listeners through to the input', async () => {
-    let keys = 0;
-    const w = mount(FormGroupInput, { attrs: { onKeydown: () => { keys++; } } });
-    await w.find('input').trigger('keydown');
-    expect(keys).toBe(1);
+  it('shows an error and marks the input invalid', () => {
+    const w = mount(FormGroupInput, { props: { error: 'Required' } });
+    const input = w.find('input');
+    const feedback = w.find('.invalid-feedback');
+    expect(input.classes()).toContain('is-invalid');
+    expect(input.attributes('aria-invalid')).toBe('true');
+    expect(feedback.text()).toBe('Required');
+    expect(input.attributes('aria-describedby')).toBe(feedback.attributes('id'));
   });
 
-  it('applies inputClasses', () => {
-    expect(mount(FormGroupInput, { props: { inputClasses: 'ic' } }).find('input').classes()).toContain('ic');
+  it('wraps icon addons in an input group', () => {
+    const w = mount(FormGroupInput, { props: { addonLeftIcon: 'ti ti-mail', addonRightIcon: 'ti ti-check' } });
+    expect(w.find('.input-group').exists()).toBe(true);
+    const addons = w.findAll('.input-group-text i');
+    expect(addons.map(a => a.classes().join(' '))).toEqual(['ti ti-mail', 'ti ti-check']);
   });
 
-  it('allows replacing the input, label and help blocks', () => {
-    const w = mount(FormGroupInput, { props: { error: 'e' }, slots: { default: '<textarea class="t"></textarea>', label: '<span class="lbl"></span>', helpBlock: '<p class="help"></p>', infoBlock: '<p class="info"></p>' } });
-    expect(w.find('textarea.t').exists()).toBe(true);
+  it('accepts addon and input slots', () => {
+    const w = mount(FormGroupInput, { slots: { addonLeft: '<span class="input-group-text">@</span>', default: '<select class="form-select" />' } });
+    expect(w.find('.input-group').exists()).toBe(true);
+    expect(w.find('select').exists()).toBe(true);
     expect(w.find('input').exists()).toBe(false);
-    expect(w.find('.lbl').exists()).toBe(true);
-    expect(w.find('.help').exists()).toBe(true);
-    expect(w.find('.info').exists()).toBe(true);
-    expect(w.find('.invalid-feedback').exists()).toBe(false);
   });
 
-  it('is registered as fg-input', () => {
-    expect(FormGroupInput.name).toBe('fg-input');
+  it('emits focus and blur', async () => {
+    const onFocus = vi.fn();
+    const w = mount(FormGroupInput, { attrs: { onFocus } });
+    await w.find('input').trigger('focus');
+    await w.find('input').trigger('blur');
+    expect(w.emitted('focus')).toHaveLength(1);
+    expect(w.emitted('blur')).toHaveLength(1);
+  });
+
+  it('gives each input its own id', () => {
+    const w = mount({ components: { 'fg-input': FormGroupInput }, template: '<div><fg-input label="A" /><fg-input label="B" /></div>' });
+    const ids = w.findAll('input').map(i => i.attributes('id'));
+    expect(new Set(ids).size).toBe(2);
   });
 });

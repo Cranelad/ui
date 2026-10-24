@@ -1,7 +1,7 @@
 {
   "name": "@cranelad/ui",
-  "version": "0.2.0",
-  "description": "Cranelad's internal Vue 3 UI kit and theme (based on Vue Now UI Kit, on Bootstrap 5)",
+  "version": "1.0.0",
+  "description": "Cranelad's internal Vue 3 UI kit and theme, on Bootstrap 5",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
   "peerDependencies": {
     "bootstrap": "^5.3.8",
     "element-plus": "^2.0.0",
-    "vue": "^3.4.0"
+    "vue": "^3.5.0"
   },
   "peerDependenciesMeta": {
     "element-plus": {

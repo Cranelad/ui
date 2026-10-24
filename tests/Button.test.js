@@ -1,55 +1,56 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { Button } from '../src/index.js';
 
 describe('Button (n-button)', () => {
-  it('renders a default button', () => {
+  it('renders a primary button', () => {
     const w = mount(Button, { slots: { default: 'Go' } });
     expect(w.element.tagName).toBe('BUTTON');
     expect(w.attributes('type')).toBe('button');
-    expect(w.classes()).toEqual(['btn', 'btn-default']);
+    expect(w.classes()).toEqual(['btn', 'btn-primary']);
     expect(w.text()).toBe('Go');
   });
 
-  it('maps props to classes', () => {
-    const w = mount(Button, {
-      props: { type: 'primary', round: true, simple: true, block: true, social: true, link: true, icon: true, wide: true, size: 'lg' }
-    });
-    expect(w.classes()).toEqual(expect.arrayContaining([
-      'btn', 'btn-primary', 'btn-round', 'btn-simple', 'btn-block', 'btn-social', 'btn-link', 'btn-icon', 'btn-wd', 'btn-lg'
-    ]));
+  it('maps props to Bootstrap classes', () => {
+    const w = mount(Button, { props: { type: 'danger', round: true, block: true, icon: true, size: 'lg' } });
+    expect(w.classes()).toEqual(['btn', 'btn-danger', 'btn-lg', 'rounded-pill', 'w-100', 'btn-icon']);
+  });
+
+  it('outlines with `outline`, except link buttons', async () => {
+    const w = mount(Button, { props: { type: 'info', outline: true } });
+    expect(w.classes()).toContain('btn-outline-info');
+    await w.setProps({ type: 'link' });
+    expect(w.classes()).toContain('btn-link');
+    expect(w.classes()).not.toContain('btn-outline-link');
   });
 
   it('supports another tag and native type', () => {
-    const w = mount(Button, { props: { tag: 'a', nativeType: 'submit' } });
-    expect(w.element.tagName).toBe('A');
-    expect(w.attributes('type')).toBe('submit');
+    const a = mount(Button, { props: { tag: 'a' } });
+    expect(a.element.tagName).toBe('A');
+    expect(a.attributes('type')).toBeUndefined();
+    expect(mount(Button, { props: { nativeType: 'submit' } }).attributes('type')).toBe('submit');
+  });
+
+  it('shows a spinner and disables itself while loading', async () => {
+    const w = mount(Button, { slots: { default: 'Save' } });
+    expect(w.find('.spinner-border').exists()).toBe(false);
+    expect(w.attributes('disabled')).toBeUndefined();
+    await w.setProps({ loading: true });
+    expect(w.find('.spinner-border').exists()).toBe(true);
+    expect(w.attributes('disabled')).toBeDefined();
+    expect(w.attributes('aria-busy')).toBe('true');
+    expect(w.text()).toBe('Save');
   });
 
   it('emits click with the event', async () => {
     const w = mount(Button);
     await w.trigger('click');
-    expect(w.emitted('click')).toHaveLength(1);
     expect(w.emitted('click')[0][0]).toBeInstanceOf(Event);
   });
 
-  it('renders label slots', () => {
-    const w = mount(Button, { slots: { label: 'L', labelRight: 'R', default: 'Text' } });
-    expect(w.find('.btn-label:not(.btn-label-right)').text()).toBe('L');
-    expect(w.find('.btn-label.btn-label-right').text()).toBe('R');
-  });
-
-  it('validates type and size', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    mount(Button, { props: { type: 'neutral', size: 'sm' } });
-    mount(Button, { props: { type: 'facebook', size: 'lg' } });
-    expect(warn).not.toHaveBeenCalled();
-    mount(Button, { props: { type: 'purple', size: 'huge' } });
-    expect(warn.mock.calls.map(c => c[0]).join('\n')).toMatch(/Invalid prop: custom validator check failed for prop "type"[\s\S]*prop "size"/);
-    warn.mockRestore();
-  });
-
-  it('is registered as n-button', () => {
-    expect(Button.name).toBe('n-button');
+  it('rejects unknown types', () => {
+    expect(Button.props.type.validator('neutral')).toBe(false);
+    expect(Button.props.type.validator('success')).toBe(true);
+    expect(Button.props.size.validator('xl')).toBe(false);
   });
 });

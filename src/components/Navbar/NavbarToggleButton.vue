@@ -2,14 +2,12 @@
   <button
     type="button"
     class="navbar-toggler"
-    :class="toggled ? 'toggled' : 'collapsed'"
-    aria-controls="navigation"
+    :class="{ collapsed: !toggled }"
+    :aria-controls="controls"
     :aria-expanded="toggled"
     aria-label="Toggle navigation"
   >
-    <span class="navbar-toggler-bar top-bar" />
-    <span class="navbar-toggler-bar middle-bar" />
-    <span class="navbar-toggler-bar bottom-bar" />
+    <span class="navbar-toggler-icon" />
   </button>
 </template>
 
@@ -18,6 +16,8 @@ defineOptions({ name: 'navbar-toggle-button' });
 
 defineProps({
   /** Whether the menu it controls is open. */
-  toggled: Boolean
+  toggled: Boolean,
+  /** id of the menu it controls. */
+  controls: { type: String, default: undefined }
 });
 </script>

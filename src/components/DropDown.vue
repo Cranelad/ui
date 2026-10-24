@@ -2,19 +2,21 @@
   <component
     :is="tag"
     v-click-outside="close"
-    class="dropdown"
-    :class="{ show: isOpen, dropdown: direction === 'down', dropup: direction === 'up' }"
-    aria-haspopup="true"
-    :aria-expanded="isOpen"
-    @click="toggle"
+    :class="direction === 'up' ? 'dropup' : 'dropdown'"
   >
-    <slot name="title">
-      <a class="dropdown-toggle nav-link" :class="{ 'no-caret': hideArrow }">
-        <i :class="icon" />
-        <span class="no-icon">{{ title }}</span>
-      </a>
+    <slot name="title" :toggle="toggle" :is-open="isOpen">
+      <button
+        type="button"
+        class="dropdown-toggle"
+        :class="[toggleClasses, { show: isOpen, 'no-caret': hideArrow }]"
+        :aria-expanded="isOpen"
+        @click="toggle"
+      >
+        <i v-if="icon" :class="icon" aria-hidden="true" />
+        {{ title }}
+      </button>
     </slot>
-    <ul class="dropdown-menu" :class="{ 'dropdown-menu-right': position === 'right', show: isOpen }">
+    <ul class="dropdown-menu" :class="{ 'dropdown-menu-end': align === 'end', show: isOpen }">
       <slot />
     </ul>
   </component>
@@ -30,13 +32,15 @@ defineProps({
   /** Open downwards or upwards. */
   direction: { type: String, default: 'down', validator: value => ['down', 'up'].includes(value) },
   title: { type: String, default: undefined },
-  /** Icon classes shown before the title. */
+  /** Icon classes shown before the title, e.g. "ti ti-user". */
   icon: { type: String, default: undefined },
-  /** "right" aligns the menu to the right edge of the toggle. */
-  position: { type: String, default: undefined, validator: value => ['left', 'right'].includes(value) },
+  /** Align the menu with the start or end edge of the toggle. */
+  align: { type: String, default: 'start', validator: value => ['start', 'end'].includes(value) },
+  /** Classes for the default toggle, e.g. "btn btn-primary" or "nav-link". */
+  toggleClasses: { type: [String, Object, Array], default: 'btn btn-primary' },
   hideArrow: Boolean,
   /** Element to render; "li" fits inside a navbar's <ul>. */
-  tag: { type: String, default: 'li' }
+  tag: { type: String, default: 'div' }
 });
 
 const emit = defineEmits(['change']);
@@ -64,11 +68,7 @@ provide('closeDropDown', close);
 </script>
 
 <style>
-.dropdown {
-  list-style-type: none;
-}
-
-.dropdown .dropdown-toggle {
-  cursor: pointer;
+.dropdown-toggle.no-caret::after {
+  display: none;
 }
 </style>

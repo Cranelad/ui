@@ -1,7 +1,7 @@
 <template>
   <section :id="id" class="doc-example">
-    <h3 class="title">{{ title }}</h3>
-    <p v-if="$slots.description" class="description"><slot name="description" /></p>
+    <h3 class="text-primary">{{ title }}</h3>
+    <p v-if="$slots.description"><slot name="description" /></p>
     <div class="doc-live">
       <slot />
     </div>

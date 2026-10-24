@@ -1,5 +1,10 @@
 <template>
-  <component :is="to ? 'router-link' : 'a'" :to="to" class="dropdown-item" @click.stop="onClick">
+  <component
+    :is="to ? 'router-link' : 'a'"
+    :to="to"
+    :class="closeDropDown ? 'dropdown-item' : 'nav-link'"
+    @click="onClick"
+  >
     <slot />
   </component>
 </template>
@@ -14,7 +19,8 @@ defineProps({
   to: { type: [String, Object], default: undefined }
 });
 
-// Clicking a link closes the navbar menu and dropdown it sits in, if any.
+// Inside a DropDown it's a dropdown-item, otherwise a nav-link. Clicking it
+// closes the dropdown and navbar menu it sits in, if any.
 const closeNavbar = inject('closeNavbar', null);
 const closeDropDown = inject('closeDropDown', null);
 

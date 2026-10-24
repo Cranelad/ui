@@ -10,8 +10,11 @@ $min-contrast-ratio: 3;   // white text on $primary buttons, as before
 
 $body-bg: #000;
 $body-color: #fff;
+$body-emphasis-color: #fff;
 $text-muted-color: rgba(#fff, .7);
 $body-secondary-color: $text-muted-color;
+$body-secondary-bg: #222;     // disabled inputs, progress tracks, ...
+$body-tertiary-bg: #111;
 $border-color: rgba(#fff, .2);
 
 // Typography
@@ -75,6 +78,7 @@ $input-focus-border-color: $primary;
 $input-focus-box-shadow: none;
 $form-label-margin-bottom: .25rem;
 $form-select-indicator-color: #888;
+$form-switch-color: rgba(#fff, .5);
 
 // Cards: light by default (dashboards, admin forms); .text-bg-info for blue.
 $card-bg: #fff;
@@ -84,12 +88,16 @@ $card-spacer-y: 1.25rem;
 $card-spacer-x: 1.25rem;
 $card-cap-bg: transparent;
 
-// Header
+// Navbars. The page is dark, so the default ("light") navbar has light text too.
+// The site header's blue links are set in components/_header.scss.
 $navbar-padding-y: 1rem;
 $navbar-brand-font-size: $font-size-base;
 $navbar-nav-link-padding-x: .9375rem;
-$navbar-dark-color: $primary;
-$navbar-dark-hover-color: $info;
-$navbar-dark-active-color: $info;
-$navbar-dark-brand-color: $primary;
-$navbar-dark-brand-hover-color: $info;
+$navbar-light-color: rgba(#fff, .75);
+$navbar-light-hover-color: #fff;
+$navbar-light-active-color: #fff;
+$navbar-light-disabled-color: rgba(#fff, .4);
+$navbar-light-brand-color: #fff;
+$navbar-light-brand-hover-color: #fff;
+$navbar-light-icon-color: rgba(#fff, .75);
+$navbar-light-toggler-border-color: rgba(#fff, .15);

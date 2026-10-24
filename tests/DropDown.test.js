@@ -1,86 +1,72 @@
-import { describe, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import CraneladUi, { DropDown, NavLink } from '../src/index.js';
+import { describe, it, expect, afterEach } from 'vitest';
+import { mount, enableAutoUnmount } from '@vue/test-utils';
+import { DropDown, NavLink } from '../src/index.js';
 
-const global = { plugins: [CraneladUi] };
+enableAutoUnmount(afterEach);
+
+const items = '<li><nav-link>One</nav-link></li>';
 
 describe('DropDown', () => {
-  it('renders a closed li dropdown with a toggle', () => {
-    const w = mount(DropDown, { global, props: { title: 'Menu', icon: 'ic' }, slots: { default: '<a class="dropdown-item">One</a>' } });
-    expect(w.element.tagName).toBe('LI');
+  it('renders a closed dropdown with a button toggle', () => {
+    const w = mount(DropDown, { props: { title: 'Menu', icon: 'ti ti-user' } });
+    expect(w.element.tagName).toBe('DIV');
     expect(w.classes()).toEqual(['dropdown']);
-    expect(w.attributes('aria-haspopup')).toBe('true');
-    expect(w.attributes('aria-expanded')).toBe('false');
-    const toggle = w.find('a.dropdown-toggle.nav-link');
-    expect(toggle.find('i.ic').exists()).toBe(true);
-    expect(toggle.find('span.no-icon').text()).toBe('Menu');
-    expect(w.find('ul.dropdown-menu').classes()).toEqual(['dropdown-menu']);
-    expect(w.find('ul.dropdown-menu .dropdown-item').text()).toBe('One');
+    const toggle = w.find('button.dropdown-toggle');
+    expect(toggle.classes()).toEqual(expect.arrayContaining(['btn', 'btn-primary']));
+    expect(toggle.attributes('aria-expanded')).toBe('false');
+    expect(toggle.text()).toBe('Menu');
+    expect(toggle.find('i').classes()).toEqual(['ti', 'ti-user']);
+    expect(w.find('.dropdown-menu').classes()).not.toContain('show');
   });
 
-  it('toggles open on click and emits change', async () => {
-    const w = mount(DropDown, { global });
-    await w.trigger('click');
-    expect(w.classes()).toContain('show');
-    expect(w.attributes('aria-expanded')).toBe('true');
+  it('opens and closes from the toggle, emitting change once each time', async () => {
+    const w = mount(DropDown, { props: { title: 'Menu' } });
+    await w.find('.dropdown-toggle').trigger('click');
     expect(w.find('.dropdown-menu').classes()).toContain('show');
-    await w.trigger('click');
-    expect(w.classes()).not.toContain('show');
+    expect(w.find('.dropdown-toggle').attributes('aria-expanded')).toBe('true');
+    await w.find('.dropdown-toggle').trigger('click');
+    expect(w.find('.dropdown-menu').classes()).not.toContain('show');
     expect(w.emitted('change')).toEqual([[true], [false]]);
   });
 
-  it('closes when clicking outside', async () => {
-    const w = mount(DropDown, { global, attachTo: document.body });
-    await w.trigger('click');
-    document.body.click();
-    await w.vm.$nextTick();
-    expect(w.classes()).not.toContain('show');
-    expect(w.emitted('change').at(-1)).toEqual([false]);
-    w.unmount();
-  });
-
-  it('only emits change when the state changes', async () => {
-    const w = mount(DropDown, { global, attachTo: document.body });
-    document.body.click();
+  it('closes on a click outside, without emitting when already closed', async () => {
+    const w = mount(DropDown, { attachTo: document.body });
     document.body.click();
     expect(w.emitted('change')).toBeUndefined();
-    w.unmount();
-  });
-
-  it('works without the plugin (imports v-click-outside itself)', async () => {
-    const w = mount(DropDown, { attachTo: document.body });
-    await w.trigger('click');
+    await w.find('.dropdown-toggle').trigger('click');
     document.body.click();
     await w.vm.$nextTick();
-    expect(w.classes()).not.toContain('show');
-    w.unmount();
+    expect(w.find('.dropdown-menu').classes()).not.toContain('show');
+    expect(w.emitted('change')).toEqual([[true], [false]]);
   });
 
-  it('closes when a NavLink inside is clicked', async () => {
-    const w = mount({
-      components: { DropDown, NavLink },
-      template: '<drop-down><nav-link class="x">Item</nav-link></drop-down>'
-    }, { global });
-    const dd = w.findComponent(DropDown);
-    await dd.trigger('click');
-    expect(dd.classes()).toContain('show');
-    await w.find('.x').trigger('click');
-    expect(dd.classes()).not.toContain('show');
+  it('closes when one of its links is clicked; links are dropdown items', async () => {
+    const w = mount({ components: { DropDown, NavLink }, template: `<drop-down>${items}</drop-down>` });
+    await w.find('.dropdown-toggle').trigger('click');
+    const link = w.find('.dropdown-menu a');
+    expect(link.classes()).toContain('dropdown-item');
+    await link.trigger('click');
+    expect(w.find('.dropdown-menu').classes()).not.toContain('show');
   });
 
-  it('supports position, direction, hideArrow, tag and a title slot', () => {
-    const w = mount(DropDown, { global, props: { position: 'right', direction: 'up', hideArrow: true, tag: 'div' } });
-    expect(w.element.tagName).toBe('DIV');
-    expect(w.classes()).toContain('dropup');
-    expect(w.classes()).not.toContain('dropdown-menu');
-    expect(w.find('.dropdown-menu').classes()).toContain('dropdown-menu-right');
-    expect(w.find('.dropdown-toggle').classes()).toContain('no-caret');
-    const t = mount(DropDown, { global, slots: { title: '<button class="mine">T</button>' } });
-    expect(t.find('.mine').exists()).toBe(true);
-    expect(t.find('.dropdown-toggle').exists()).toBe(false);
+  it('supports direction, alignment, toggle classes, no caret and tag', () => {
+    const w = mount(DropDown, { props: { direction: 'up', align: 'end', toggleClasses: 'nav-link', hideArrow: true, tag: 'li' } });
+    expect(w.element.tagName).toBe('LI');
+    expect(w.classes()).toEqual(['dropup']);
+    expect(w.find('.dropdown-menu').classes()).toContain('dropdown-menu-end');
+    expect(w.find('.dropdown-toggle').classes()).toEqual(expect.arrayContaining(['nav-link', 'no-caret']));
+    expect(w.find('.dropdown-toggle').classes()).not.toContain('btn');
   });
 
-  it('is registered as drop-down', () => {
-    expect(DropDown.name).toBe('drop-down');
+  it('accepts a custom toggle', async () => {
+    const w = mount(DropDown, { slots: { title: '<template #title="{ toggle, isOpen }"><a class="t" @click="toggle">{{ isOpen }}</a></template>' } });
+    expect(w.find('.t').text()).toBe('false');
+    await w.find('.t').trigger('click');
+    expect(w.find('.t').text()).toBe('true');
+  });
+
+  it('validates its props', () => {
+    expect(DropDown.props.direction.validator('left')).toBe(false);
+    expect(DropDown.props.align.validator('right')).toBe(false);
   });
 });

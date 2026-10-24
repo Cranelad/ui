@@ -1,27 +1,21 @@
 <template>
   <component
     :is="tag"
-    :type="nativeType"
+    :type="tag === 'button' ? nativeType : undefined"
     class="btn"
     :class="classes"
+    :disabled="tag === 'button' ? disabled || loading : undefined"
+    :aria-busy="loading || undefined"
     @click="emit('click', $event)"
   >
-    <span v-if="$slots.label" class="btn-label">
-      <slot name="label" />
-    </span>
+    <span v-if="loading" class="spinner-border spinner-border-sm" aria-hidden="true" />
     <slot />
-    <span v-if="$slots.labelRight" class="btn-label btn-label-right">
-      <slot name="labelRight" />
-    </span>
   </component>
 </template>
 
 <script>
 // Module scope, so defineProps (which is hoisted out of setup) can use it.
-const TYPES = [
-  'default', 'primary', 'secondary', 'info', 'success', 'warning', 'danger', 'neutral', 'light', 'dark', 'link',
-  'facebook', 'twitter', 'google', 'github', 'linkedin'
-];
+const TYPES = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'link'];
 </script>
 
 <script setup>
@@ -32,34 +26,34 @@ defineOptions({ name: 'n-button' });
 const props = defineProps({
   /** Element to render, e.g. "a" for a link styled as a button. */
   tag: { type: String, default: 'button' },
-  /** Colour: btn-{type}. */
-  type: { type: String, default: 'default', validator: value => TYPES.includes(value) },
-  /** The element's type attribute (button, submit, reset). */
+  /** Colour: btn-{type}, or btn-outline-{type} with `outline`. */
+  type: { type: String, default: 'primary', validator: value => TYPES.includes(value) },
+  /** The button's type attribute (button, submit, reset). */
   nativeType: { type: String, default: 'button' },
+  /** Outlined instead of filled. */
+  outline: Boolean,
+  /** Pill-shaped. */
   round: Boolean,
-  simple: Boolean,
+  /** Full width. */
   block: Boolean,
-  social: Boolean,
-  link: Boolean,
+  /** A square (round with `round`) button holding just an icon. */
   icon: Boolean,
-  wide: Boolean,
   /** btn-sm or btn-lg. */
-  size: { type: String, default: undefined, validator: value => ['sm', 'lg'].includes(value) }
+  size: { type: String, default: undefined, validator: value => ['sm', 'lg'].includes(value) },
+  disabled: Boolean,
+  /** Show a spinner and disable the button, e.g. while a form is sending. */
+  loading: Boolean
 });
 
 const emit = defineEmits(['click']);
 
 const classes = computed(() => [
+  props.outline && props.type !== 'link' ? `btn-outline-${props.type}` : `btn-${props.type}`,
+  props.size ? `btn-${props.size}` : null,
   {
-    'btn-simple': props.simple,
-    'btn-icon': props.icon,
-    'btn-round': props.round,
-    'btn-block': props.block,
-    'btn-social': props.social,
-    'btn-link': props.link,
-    'btn-wd': props.wide
-  },
-  `btn-${props.type}`,
-  props.size ? `btn-${props.size}` : null
+    'rounded-pill': props.round,
+    'w-100': props.block,
+    'btn-icon': props.icon
+  }
 ]);
 </script>

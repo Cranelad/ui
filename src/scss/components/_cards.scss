@@ -1,0 +1,14 @@
+// Cards are white with dark text (dashboards, admin forms). Give the contents of
+// a plain white card light-page colours, so tables, inputs, list groups and the
+// like inside it don't take the dark page's. Coloured cards (text-bg-*, bg-*)
+// keep their own colours.
+
+.card:not([class*="bg-"]) {
+  --#{$prefix}body-bg: #{$card-bg};
+  --#{$prefix}body-color: #{$card-color};
+  --#{$prefix}emphasis-color: #000;
+  --#{$prefix}secondary-color: #{rgba($card-color, .75)};
+  --#{$prefix}secondary-bg: #{$gray-200};
+  --#{$prefix}tertiary-bg: #{$gray-100};
+  --#{$prefix}border-color: #{$gray-300};
+}

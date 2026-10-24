@@ -1,13 +1,15 @@
 # @cranelad/ui
 
-Cranelad's internal Vue 3 UI kit: the Now UI Kit theme and components, on
-Bootstrap 5. For use in Cranelad projects only (see [LICENSE](LICENSE)).
+Cranelad's internal Vue 3 UI kit: Bootstrap 5 with the Cranelad theme (black
+pages, blue headings and links, blue cards, pill-shaped buttons and inputs) and
+a few Vue components that render plain Bootstrap 5 markup. For use in Cranelad
+projects only (see [LICENSE](LICENSE)).
 
 ## Requirements
 
 The package ships source (`.vue` and `.scss`), so the consuming project needs:
 
-- Vue 3.4+ and Vite with `@vitejs/plugin-vue`
+- Vue 3.5+ and Vite with `@vitejs/plugin-vue`
 - `sass`
 - `bootstrap` 5.3 (peer dependency)
 - `element-plus` 2 only if you use `style-element-plus.scss` (optional peer dependency)
@@ -17,16 +19,16 @@ The package ships source (`.vue` and `.scss`), so the consuming project needs:
 Install a tagged release straight from GitHub; no token or npm account needed:
 
 ```sh
-npm install "github:Cranelad/ui#semver:^0.2.0"
+npm install "github:Cranelad/ui#semver:^1.0.0"
 ```
 
 which adds this to `package.json`:
 
 ```json
-"@cranelad/ui": "github:Cranelad/ui#semver:^0.2.0"
+"@cranelad/ui": "github:Cranelad/ui#semver:^1.0.0"
 ```
 
-npm picks the newest release tag matching the range (`v0.2.x` here). Update
+npm picks the newest release tag matching the range (`v1.x` here). Update
 the range to move to a new minor or major version. Requires `git` on the
 machine running `npm install`.
 
@@ -67,7 +69,7 @@ since the server won't have `../ui`.
 ## Use
 
 ```js
-// Styles: Bootstrap 5 and the theme, in one stylesheet.
+// Styles: Bootstrap 5 and the Cranelad theme, in one stylesheet.
 import '@cranelad/ui/style.scss'
 
 // Components
@@ -76,9 +78,9 @@ app.use(CraneladUi) // v-click-outside, <n-button>, <fg-input>, <parallax>
 ```
 
 Projects that use [Element Plus](https://element-plus.org) import
-`style-element-plus.scss` instead: the same kit plus theme styles for Element's
-inputs, selects, date pickers and carousel. (Element Plus is an optional peer
-dependency; the kit's own components don't need it.)
+`style-element-plus.scss` instead: the same kit with Element Plus's colours,
+font and radii set to match. (Element Plus is an optional peer dependency; the
+kit's own components don't need it.)
 
 ```js
 import '@cranelad/ui/style-element-plus.scss'
@@ -90,7 +92,7 @@ tokens (no CSS output, so the kit isn't compiled twice):
 ```scss
 @import '@cranelad/ui/tokens.scss';
 
-.thing { color: $primary-color; }
+.thing { color: $primary; }
 ```
 
 Other components are imported where they are used:
@@ -101,6 +103,38 @@ import { Card, Navbar, NavLink, DropDown, Alert } from '@cranelad/ui'
 
 The docs page (`npm run demo`, then open `/docs.html`) has a live example and
 code for every component.
+
+## The theme
+
+Everything is standard Bootstrap 5, styled through Bootstrap's own variables in
+`src/scss/_variables.scss`: write ordinary Bootstrap markup (`btn btn-primary
+rounded-pill`, `card text-bg-info`, `form-control`, ...) and it comes out in the
+Cranelad look. The main tokens:
+
+| Token | Value | Used for |
+|---|---|---|
+| `$primary` | `#2196f3` | Headings, links, the header line, primary buttons |
+| `$info` | `#2ca8ff` | The blue cards (`.text-bg-info`) |
+| `$body-bg` / `$body-color` | `#000` / `#fff` | Black pages, white text |
+| `$font-size-base` | `.875rem` (14px) | |
+| `$input-border-radius` | `1.875rem` | Pill-shaped inputs, outlined in the text colour |
+
+Cards are white with dark text by default (for dashboards and admin forms);
+`.text-bg-info` gives the blue ones.
+
+On top of Bootstrap the kit adds a few site-level pieces:
+
+| Class | What |
+|---|---|
+| `.site-header` | Black header with the blue line under it; put a `.navbar` inside |
+| `.site-footer`, `.site-footer-links`, `.site-footer-copyright` | The small footer: uppercase links and the copyright line |
+| `.section`, `.section-title`, `.section-lead` | Page sections with centred blue titles, separated by a thin blue line |
+| `.btn-ghost` | Outline button for the blue cards, in the card's text colour |
+| `.btn-icon` | Square (round with `.rounded-pill`) button holding just an icon |
+| `.link-arrow` | Text link with an arrow icon that nudges on hover |
+
+Textareas are a plain underline rather than a pill, and an `.input-group-text`
+icon sits inside the pill next to its input.
 
 ## Components
 
@@ -114,52 +148,54 @@ exported by name, including the directive (`clickOutside`).
 
 | Prop | Type | Default | |
 |---|---|---|---|
-| `type` | String | `'default'` | Colour: `default`, `primary`, `secondary`, `info`, `success`, `warning`, `danger`, `neutral`, `light`, `dark`, `link`, `facebook`, `twitter`, `google`, `github`, `linkedin` |
+| `type` | String | `'primary'` | `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark`, `link` |
+| `outline` | Boolean | `false` | `btn-outline-{type}` instead of filled |
+| `round` | Boolean | `false` | Pill-shaped (`rounded-pill`) |
+| `block` | Boolean | `false` | Full width (`w-100`) |
+| `icon` | Boolean | `false` | Square icon-only button (`btn-icon`) |
 | `size` | String | | `sm` or `lg` |
-| `round`, `simple`, `block`, `icon`, `link`, `social`, `wide` | Boolean | `false` | `btn-round`, `btn-simple`, `btn-block`, ... |
+| `loading` | Boolean | `false` | Shows a spinner and disables the button |
+| `disabled` | Boolean | `false` | |
 | `tag` | String | `'button'` | Element to render, e.g. `a` |
 | `nativeType` | String | `'button'` | The `type` attribute (`submit`, `reset`) |
 
-Events: `click`. Slots: default, `label`, `labelRight`.
+Events: `click`. Slot: default.
 
 ### `FormGroupInput` (`<fg-input>`)
 
-A `.form-group` with a label, an input and optional icon addons. Supports
-`v-model`. `class` and `style` apply to the wrapper; all other attributes and
-listeners (`type`, `placeholder`, `@keydown`, ...) go to the `<input>`.
+A label, an input and optional icon addons, as Bootstrap 5 form markup. Supports
+`v-model`. The label is linked to the input (pass `id` to choose the id).
+`class` and `style` apply to the wrapper; all other attributes and listeners
+(`type`, `placeholder`, `@keydown`, ...) go to the `<input>`.
 
 | Prop | Type | Default | |
 |---|---|---|---|
 | `modelValue` | String, Number | `''` | `v-model` |
 | `label` | String | | |
-| `required` | Boolean | `false` | Adds `*` to the label |
-| `error` | String | | Shows the message and marks the field invalid |
-| `addonLeftIcon`, `addonRightIcon` | String | | Icon classes, e.g. `now-ui-icons ui-1_email-85` |
+| `required` | Boolean | `false` | Adds `*` to the label and `required` to the input |
+| `error` | String | | Shows the message and marks the input invalid |
+| `addonLeftIcon`, `addonRightIcon` | String | | Icon classes, e.g. `ti ti-mail` |
 | `labelClasses`, `inputClasses` | String | | Extra classes |
 
 Events: `update:modelValue`, `focus`, `blur`. Slots: default (replaces the
-input), `label`, `addonLeft`, `addonRight`, `infoBlock`, `helpBlock`.
+input), `label`, `addonLeft`, `addonRight`, `helpBlock` (replaces the error).
 
 ### `Card`
 
 | Prop | Type | Default | |
 |---|---|---|---|
-| `title`, `subTitle`, `description` | String | | Build the header |
-| `category` | String | | Small heading above everything |
-| `type` | String | | `card-{type}`, e.g. `login` |
-| `color` | String | | Theme background (`data-background-color`): `orange`, `blue`, `red`, `green`, `yellow`, `black`, `gray`, `secondary` |
-| `plain`, `raised` | Boolean | `false` | `card-plain`, `card-raised` |
-| `noFooterLine` | Boolean | `false` | No `<hr>` above the footer |
-| `headerClasses`, `cardBodyClasses` | String, Object, Array | | Extra classes |
+| `title`, `subTitle`, `description` | String | | Shown at the top of the body |
+| `color` | String | | `text-bg-{color}`: `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark` |
+| `headerClasses`, `bodyClasses` | String, Object, Array | | Extra classes |
 
-Slots: default (`.card-body`), `header`, `footer`, `category`, `image`,
-`avatar`, `info`, `raw-content` (inside the card, outside the body).
+Slots: default (`.card-body`), `header`, `footer`, `image` (first in the card,
+e.g. an `<img class="card-img-top">`).
 
 ### `Alert`
 
 | Prop | Type | Default | |
 |---|---|---|---|
-| `type` | String | `'default'` | `primary`, `secondary`, `info`, `success`, `warning`, `danger`, `light`, `dark` |
+| `type` | String | `'primary'` | `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, `dark` |
 | `dismissible` | Boolean | `false` | Show a close button |
 
 Events: `dismiss`. Slots: default, `dismiss-icon` (receives `{ dismiss }`).
@@ -168,104 +204,84 @@ Events: `dismiss`. Slots: default, `dismiss-icon` (receives `{ dismiss }`).
 
 | Prop | Type | Default | |
 |---|---|---|---|
-| `type` | String | `'white'` | Background: `white`, `default`, `primary`, `info`, `success`, `warning`, `danger`, `black` |
-| `position` | String | `'relative'` | `navbar-{position}`; `fixed` gives `fixed-top` |
-| `transparent` | Boolean | `false` | Transparent background |
+| `type` | String | `'body'` | Background `bg-{type}`: a theme colour, `body`, `black` or `white` |
+| `dark` | Boolean | `false` | Light text and toggler for dark backgrounds (`data-bs-theme="dark"`) |
+| `transparent` | Boolean | `false` | No background |
 | `colorOnScroll` | Number | `0` | Stay transparent until scrolled this many pixels |
+| `position` | String | `'static'` | `static`, `fixed-top`, `fixed-bottom` or `sticky-top` |
 | `expand` | String, Boolean | `'lg'` | Breakpoint the menu expands at; `false` never expands |
+| `fluid` | Boolean | `false` | Full-width container |
 | `menuClasses` | String, Object, Array | | Classes for the menu's `<ul class="navbar-nav">`, e.g. `ms-auto` |
-| `navMenuClasses` | String | `''` | Classes for the collapsing menu |
-| `menuImage` | String | | Background image for the mobile menu |
+| `navMenuClasses` | String, Object, Array | | Classes for the collapsing menu |
 
 Events: `open`, `close`. Slots: default (brand; receives
 `{ toggle, open, close, isToggled }`), `navbar-menu` (the `<li>` items; same
-slot props), `before-menu`, `after-menu`. Opening the menu adds `nav-open` to
-`<html>`.
-
-On small screens the theme only styles the navbar (hamburger button, collapsing
-menu) inside `<body class="sidebar-collapse">`: add that class to `<body>`, for
-example from the app's layout component. (`bootstrap-collapse` gives the
-plainer Bootstrap-style menu instead.)
-
-Use one collapsible navbar per page: opening a navbar's mobile menu adds
-`nav-open` to `<html>`, and the theme slides in every navbar's menu on that
-class.
+slot props), `before-menu`, `after-menu`. The menu closes on a click outside it
+and when a `NavLink` in it is clicked. Each navbar is independent, so a page can
+have several.
 
 ### `NavLink`
 
-A menu link: renders `<router-link>` when `to` is set, `<a>` otherwise, and
-closes the navbar menu and dropdown it is in when clicked.
+A link that renders `<router-link>` when `to` is set, `<a>` otherwise. It is a
+`.nav-link` in a navbar and a `.dropdown-item` inside a `DropDown`, and closes
+the navbar menu and dropdown it is in when clicked.
 
 | Prop | Type | Default | |
 |---|---|---|---|
 | `to` | String, Object | | Route location |
+
+### `NavbarToggleButton`
+
+The Bootstrap toggler `Navbar` uses. Props: `toggled` (Boolean), `controls`
+(the menu's id).
 
 ### `DropDown` (`<drop-down>`)
 
 | Prop | Type | Default | |
 |---|---|---|---|
 | `title`, `icon` | String | | Toggle text and icon classes |
+| `toggleClasses` | String, Object, Array | `'btn btn-primary'` | Classes for the toggle, e.g. `nav-link` in a navbar |
 | `direction` | String | `'down'` | `down` or `up` |
-| `position` | String | | `right` aligns the menu to the right |
+| `align` | String | `'start'` | `end` aligns the menu with the toggle's end edge |
 | `hideArrow` | Boolean | `false` | No caret |
-| `tag` | String | `'li'` | Element to render (`li` fits in a navbar `<ul>`) |
+| `tag` | String | `'div'` | Element to render (`li` fits in a navbar `<ul>`) |
 
 Events: `change` (open state). Slots: default (menu items), `title` (replaces
-the toggle). Closes on clicks outside it and when a `NavLink` inside is clicked.
+the toggle; receives `{ toggle, isOpen }`). Closes on clicks outside it and when
+a `NavLink` inside is clicked.
 
 ### `Parallax` (`<parallax>`)
 
-A `<div>` whose content moves at a third of the page's scroll speed (used for
-page-header images). Slot: default.
+A `<div>` whose content moves at a third of the page's scroll speed. Slot:
+default.
 
 ### Icons
 
-`<i class="now-ui-icons ui-1_email-85"></i>`: the original Now UI Kit class
-names, drawn with [Tabler Icons](https://tabler.io/icons) (MIT). The 100
-available names and the Tabler icon used for each are in
-[`scripts/icons.mjs`](scripts/icons.mjs). Add `spin` to rotate an icon and
-`circle` for a round grey background.
+`<i class="ti ti-mail"></i>`: [Tabler Icons](https://tabler.io/icons) (MIT) by
+their own names. The kit's font holds only the 135 icons listed in
+[`scripts/icons.mjs`](scripts/icons.mjs) (about 20 kB).
 
-To use an icon from Sass (e.g. in a `::after`), use the mixin or the map:
+To use an icon from Sass (e.g. in a `::after`), use the mixin or the `$icons`
+map:
 
 ```scss
-.thing::after { @include now-ui-icon('ui-1_check'); }
+.thing::after { @include icon('check'); }
 ```
 
-To add an icon, add a line to `scripts/icons.mjs` and run
-`npm run build:icons`; it cuts Tabler's font down to the listed icons
-(about 15 kB) and regenerates `_icons.scss` and `_icon-map.scss`.
-
-### `NavbarToggleButton`
-
-The hamburger button used by `Navbar`. Prop: `toggled` (Boolean).
+To add an icon, add its name to `scripts/icons.mjs` and run
+`npm run build:icons`; it cuts Tabler's font down to the listed icons and
+regenerates `_icons.scss` and `_icon-map.scss`.
 
 ## How the styles are organised
 
 | Path | What |
 |---|---|
-| `src/scss/now-ui-kit/_variables.scss` | The theme's design tokens (colours, sizes) |
-| `src/scss/_config.scss` | Bootstrap 5 settings, matching the Bootstrap 4 defaults the theme was designed on |
-| `src/scss/kit/` | The kit's own component styles on top of Bootstrap 5 (`.form-group`, `.btn-block`, input-group addons, `.close`, dropdown positioning, ...) |
-| `src/scss/now-ui-kit/` | The Now UI Kit theme |
+| `src/scss/_variables.scss` | The theme, as Bootstrap 5 variables |
+| `src/scss/components/` | The site-level pieces Bootstrap doesn't have (header, footer, sections, buttons) |
+| `src/scss/_icons.scss`, `_icon-map.scss` | The icon font (generated) |
 | `src/scss/index.scss` | The complete stylesheet (`@cranelad/ui/style.scss`) |
-| `src/scss/element-plus.scss` | The same plus Element Plus styles (`@cranelad/ui/style-element-plus.scss`) |
+| `src/scss/element-plus.scss` | The same plus Element Plus theme variables (`@cranelad/ui/style-element-plus.scss`) |
 | `src/scss/tokens.scss` | Variables and mixins only (`@cranelad/ui/tokens.scss`) |
-
-The theme was designed for Bootstrap 4, so a few Bootstrap 4 conventions are
-part of the kit: in templates use Bootstrap 5 utility names (`ms-auto`,
-`text-end`, ...) together with the kit's markup patterns (`form-group`,
-`btn-block`, `input-group-prepend`).
-
-### Differences from the original (Bootstrap 4) kit
-
-Everything renders as it did on Bootstrap 4, except:
-
-- `<navbar type="black">` is black. Bootstrap 4 had no `.bg-black`, so it was
-  transparent; Bootstrap 5's `.bg-black` utility makes it work as named.
-- Bootstrap popovers and tooltips use Bootstrap 5's markup and arrow
-  positioning. Only Bootstrap's own JavaScript shows them, and it now produces
-  Bootstrap 5 markup.
 
 ## Development
 
@@ -276,9 +292,8 @@ npm run demo        # demo (/) and docs (/docs.html) with hot reload
 npm run demo:build  # static build in demo/dist
 ```
 
-The demo page (`demo/App.vue`) renders every component and theme style. It is
-also the reference for visual-regression checks, so add to it rather than
-rearranging it. The docs page is `demo/Docs.vue`.
+The demo page (`demo/App.vue`) renders every component and theme style; the
+docs page is `demo/Docs.vue`.
 
 ## Releasing
 

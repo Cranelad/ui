@@ -1,18 +1,19 @@
 <template>
-  <nav class="navbar" :class="classes">
-    <div class="container-fluid">
-      <div class="navbar-translate">
-        <slot v-bind="slotData" />
-        <NavbarToggleButton :toggled="showMenu" @click.stop="toggle" />
-      </div>
+  <nav class="navbar" :class="classes" :data-bs-theme="dark ? 'dark' : undefined">
+    <div :class="fluid ? 'container-fluid' : 'container'">
+      <slot v-bind="slotData" />
+      <NavbarToggleButton
+        v-if="$slots['navbar-menu']"
+        :toggled="showMenu"
+        :controls="menuId"
+        @click.stop="toggle"
+      />
       <div
         v-if="$slots['navbar-menu']"
-        id="navigation"
+        :id="menuId"
         v-click-outside="close"
         class="navbar-collapse collapse"
-        :class="[{ show: showMenu, 'has-image': menuImage }, navMenuClasses]"
-        :style="menuImage ? `background: url(${menuImage}) 0% 0% / cover;` : ''"
-        data-color="orange"
+        :class="[{ show: showMenu }, navMenuClasses]"
       >
         <slot name="before-menu" />
         <ul class="navbar-nav" :class="menuClasses">
@@ -26,75 +27,71 @@
 
 <script>
 // Module scope, so defineProps (which is hoisted out of setup) can use it.
-const TYPES = ['white', 'default', 'primary', 'danger', 'success', 'warning', 'info', 'black'];
+const TYPES = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'body', 'black', 'white'];
+const POSITIONS = ['static', 'fixed-top', 'fixed-bottom', 'sticky-top'];
 </script>
 
 <script setup>
-import { ref, computed, provide, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, provide, useId, onMounted, onBeforeUnmount } from 'vue';
 import NavbarToggleButton from './NavbarToggleButton.vue';
 import clickOutside from '../../directives/click-outside.js';
 
 defineOptions({ name: 'navbar' });
 
 const props = defineProps({
-  /** Transparent background (navbar-transparent). */
+  /** Background colour: bg-{type}. */
+  type: { type: String, default: 'body', validator: value => TYPES.includes(value) },
+  /** Light text and toggler, for dark backgrounds (data-bs-theme="dark"). */
+  dark: Boolean,
+  /** No background at all. */
   transparent: Boolean,
-  /** navbar-{position}; "fixed" gives fixed-top. */
-  position: { type: String, default: 'relative' },
-  /** Classes for the menu's <ul class="navbar-nav">, e.g. "ms-auto". */
-  menuClasses: { type: [String, Object, Array], default: undefined },
   /** Stay transparent until the page is scrolled this many pixels, then take the colour of `type`. */
   colorOnScroll: { type: Number, default: 0 },
-  /** Background colour: bg-{type}. */
-  type: { type: String, default: 'white', validator: value => TYPES.includes(value) },
-  /** Classes for the collapsing menu container. */
-  navMenuClasses: { type: String, default: '' },
-  /** Background image for the collapsed (mobile) menu. */
-  menuImage: { type: String, default: undefined },
+  /** Where it sits: static, fixed-top, fixed-bottom or sticky-top. */
+  position: { type: String, default: 'static', validator: value => POSITIONS.includes(value) },
   /** Breakpoint from which the menu is expanded (navbar-expand-{expand}); false never expands. */
-  expand: { type: [String, Boolean], default: 'lg' }
+  expand: { type: [String, Boolean], default: 'lg' },
+  /** Full-width container instead of the centred one. */
+  fluid: Boolean,
+  /** Classes for the menu's <ul class="navbar-nav">, e.g. "ms-auto". */
+  menuClasses: { type: [String, Object, Array], default: undefined },
+  /** Classes for the collapsing menu container. */
+  navMenuClasses: { type: [String, Object, Array], default: undefined }
 });
 
 const emit = defineEmits(['open', 'close']);
 
 const vClickOutside = clickOutside;
+const menuId = useId();
 const showMenu = ref(false);
-const scrollColorClass = ref('');
-const scrollValue = ref(0);
+const scrolled = ref(0);
 
 const classes = computed(() => {
-  const transparentUntilScrolled = props.colorOnScroll && scrollValue.value < props.colorOnScroll;
+  const transparent = props.transparent || (props.colorOnScroll > 0 && scrolled.value <= props.colorOnScroll);
   return [
-    {
-      'navbar-transparent': props.transparent || transparentUntilScrolled,
-      [`bg-${props.type}`]: !props.transparent && props.colorOnScroll === 0
-    },
-    props.expand ? `navbar-expand-${props.expand}` : '',
-    props.position === 'fixed' ? 'fixed-top' : `navbar-${props.position}`,
-    scrollColorClass.value
+    transparent ? 'bg-transparent' : `bg-${props.type}`,
+    props.expand ? `navbar-expand-${props.expand}` : null,
+    props.position === 'static' ? null : props.position
   ];
 });
 
-// Opening the menu also flags <html> (nav-open), which the theme uses.
-function setNav(value) {
-  const htmlClasses = document.documentElement.classList;
-  htmlClasses.toggle('nav-open', value);
-  showMenu.value = htmlClasses.contains('nav-open');
-  emit(showMenu.value ? 'open' : 'close');
+function setMenu(value) {
+  if (showMenu.value !== value) {
+    showMenu.value = value;
+    emit(value ? 'open' : 'close');
+  }
 }
 
 function toggle() {
-  setNav(!showMenu.value);
+  setMenu(!showMenu.value);
 }
 
 function open() {
-  setNav(true);
+  setMenu(true);
 }
 
 function close() {
-  if (showMenu.value) {
-    setNav(false);
-  }
+  setMenu(false);
 }
 
 const slotData = computed(() => ({ toggle, open, close, isToggled: showMenu.value }));
@@ -103,9 +100,7 @@ const slotData = computed(() => ({ toggle, open, close, isToggled: showMenu.valu
 provide('closeNavbar', close);
 
 function handleScroll() {
-  const value = document.body.scrollTop || document.documentElement.scrollTop;
-  scrollValue.value = value;
-  scrollColorClass.value = props.colorOnScroll > 0 && value > props.colorOnScroll ? `bg-${props.type}` : '';
+  scrolled.value = document.body.scrollTop || document.documentElement.scrollTop;
 }
 
 // Check the scroll position at most every 66 ms (about 15 times a second).
@@ -120,15 +115,14 @@ function onScroll() {
 }
 
 onMounted(() => {
-  handleScroll();
-  document.addEventListener('scroll', onScroll);
+  if (props.colorOnScroll > 0) {
+    handleScroll();
+    document.addEventListener('scroll', onScroll, { passive: true });
+  }
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener('scroll', onScroll);
   clearTimeout(scrollTimeout);
-  if (showMenu.value) {
-    document.documentElement.classList.remove('nav-open');
-  }
 });
 </script>

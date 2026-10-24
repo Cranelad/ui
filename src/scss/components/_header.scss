@@ -7,6 +7,15 @@
   background-color: $body-bg;
   border-bottom: 3px solid $primary;
 
+  // Blue brand and links, lighter blue on hover.
+  .navbar {
+    --#{$prefix}navbar-color: #{$primary};
+    --#{$prefix}navbar-hover-color: #{$info};
+    --#{$prefix}navbar-active-color: #{$info};
+    --#{$prefix}navbar-brand-color: #{$primary};
+    --#{$prefix}navbar-brand-hover-color: #{$info};
+  }
+
   .navbar-brand,
   .nav-link {
     font-size: $font-size-base;
