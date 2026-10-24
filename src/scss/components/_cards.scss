@@ -12,3 +12,9 @@
   --#{$prefix}tertiary-bg: #{$gray-100};
   --#{$prefix}border-color: #{$gray-300};
 }
+
+// Bootstrap gives .card-body the card's text colour, which would override the
+// readable colour text-bg-* picks for a coloured card.
+.card[class*="text-bg-"] .card-body {
+  color: inherit;
+}
