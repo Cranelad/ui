@@ -116,7 +116,8 @@ Cranelad look. The main tokens:
 | `$primary` | `#2196f3` | Headings, links, the header line, primary buttons |
 | `$info` | `#2ca8ff` | The blue cards (`.text-bg-info`) |
 | `$body-bg` / `$body-color` | `#000` / `#fff` | Black pages, white text |
-| `$font-size-base` | `.875rem` (14px) | |
+| `$font-family-sans-serif` | Open Sans (bundled) | All text |
+| `$font-size-base` | `1rem` (16px) | Body text; buttons and inputs are 14px |
 | `$input-border-radius` | `1.875rem` | Pill-shaped inputs, outlined in the text colour |
 
 Cards are white with dark text by default (for dashboards and admin forms);
@@ -255,6 +256,15 @@ a `NavLink` inside is clicked.
 A `<div>` whose content moves at a third of the page's scroll speed. Slot:
 default.
 
+### Font
+
+Open Sans (SIL Open Font License), variable weight 300-800, normal and italic,
+is bundled with the kit and served with the site; no Google Fonts request. Only
+the Latin and Latin Extended files a page needs are downloaded (about 48 kB for
+most pages). To update it, bump `@fontsource-variable/open-sans` and run
+`npm run build:fonts`, which regenerates `_fonts.scss` and the files in
+`src/scss/fonts`.
+
 ### Icons
 
 `<i class="ti ti-mail"></i>`: [Tabler Icons](https://tabler.io/icons) (MIT) by
@@ -278,6 +288,7 @@ regenerates `_icons.scss` and `_icon-map.scss`.
 |---|---|
 | `src/scss/_variables.scss` | The theme, as Bootstrap 5 variables |
 | `src/scss/components/` | The site-level pieces Bootstrap doesn't have (header, footer, sections, buttons) |
+| `src/scss/_fonts.scss` | The Open Sans font (generated) |
 | `src/scss/_icons.scss`, `_icon-map.scss` | The icon font (generated) |
 | `src/scss/index.scss` | The complete stylesheet (`@cranelad/ui/style.scss`) |
 | `src/scss/element-plus.scss` | The same plus Element Plus theme variables (`@cranelad/ui/style-element-plus.scss`) |

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Open Sans is bundled with the kit (`_fonts.scss`, `npm run build:fonts`), so
+  every visitor sees the same font instead of their system's fallback.
+- Easier reading on the black pages: body text is 16px (was 14px), buttons and
+  inputs 14px (was 12px), section leads 20px. Headings and the header's links
+  keep their sizes.
+
 ## 1.0.0
 
 Native Bootstrap 5 in place of the Now UI Kit. Breaking: markup, classes and
