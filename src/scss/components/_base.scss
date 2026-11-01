@@ -96,3 +96,16 @@ textarea.form-control {
 .btn > .spinner-border {
   margin-right: .5rem;
 }
+
+// Filled primary buttons: a deeper blue, so the white text is readable (see
+// $btn-primary-bg).
+.btn-primary {
+  --#{$prefix}btn-bg: #{$btn-primary-bg};
+  --#{$prefix}btn-border-color: #{$btn-primary-bg};
+  --#{$prefix}btn-hover-bg: #{$btn-primary-hover-bg};
+  --#{$prefix}btn-hover-border-color: #{$btn-primary-hover-bg};
+  --#{$prefix}btn-active-bg: #{$btn-primary-active-bg};
+  --#{$prefix}btn-active-border-color: #{$btn-primary-active-bg};
+  --#{$prefix}btn-disabled-bg: #{$btn-primary-bg};
+  --#{$prefix}btn-disabled-border-color: #{$btn-primary-bg};
+}

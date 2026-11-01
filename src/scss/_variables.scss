@@ -51,6 +51,11 @@ $container-max-widths: (
 );
 
 // Buttons
+// Filled primary buttons use a deeper blue than $primary, so their white text
+// meets WCAG AA (4.6:1); headings and links keep the brighter blue.
+$btn-primary-bg: #1976d2;
+$btn-primary-hover-bg: #1565c0;
+$btn-primary-active-bg: #0d47a1;
 $btn-font-size: .875rem;    // 14px
 $btn-padding-y: .6875rem;
 $btn-padding-x: 1.375rem;

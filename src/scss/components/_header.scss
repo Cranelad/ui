@@ -23,8 +23,19 @@
     text-transform: uppercase;
   }
 
+  // The logo, if there is one, sits beside the name.
   .navbar-brand {
+    display: inline-flex;
+    gap: .625rem;
+    align-items: center;
+    padding-block: 0;     // keeps the header the same height with the logo
     font-weight: 700;
+
+    img {
+      width: 2rem;
+      height: 2rem;
+      border-radius: .25rem;
+    }
   }
 
   .navbar-toggler {

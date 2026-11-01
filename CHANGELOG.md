@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+- Filled primary buttons use a deeper blue (`$btn-primary-bg`, #1976d2) so their
+  white text meets WCAG AA contrast (4.6:1, was 3.1:1). Headings and links keep
+  the brighter `$primary`.
+- The header shows a logo beside the name when the brand contains an `<img>`,
+  at the same header height.
+
 ## 1.1.0
 
 - Open Sans is bundled with the kit (`_fonts.scss`, `npm run build:fonts`), so
