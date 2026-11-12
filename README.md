@@ -137,6 +137,85 @@ On top of Bootstrap the kit adds a few site-level pieces:
 Textareas are a plain underline rather than a pill, and an `.input-group-text`
 icon sits inside the pill next to its input.
 
+## Theming
+
+The look above is the default. A project can give the kit its own colours
+(or any other token) by setting them before it imports the kit: every
+variable in `src/scss/_variables.scss` is `!default`, and everything else
+(links, buttons, the header, Element Plus, ...) follows from them.
+
+Import the kit's styles from the project's own Sass instead of from
+JavaScript, with the project's values first:
+
+```scss
+// resources/sass/app.scss
+$primary: #2c457d;
+$body-bg: #f8f9fe;
+$body-color: #2c2c2c;
+
+@import '@cranelad/ui/style-element-plus.scss';   // or style.scss
+```
+
+or, with Sass modules:
+
+```scss
+@use '@cranelad/ui/style.scss' with ($primary: #2c457d, $body-bg: #f8f9fe);
+```
+
+Any Bootstrap variable can be set the same way (`$success`, `$danger`,
+`$border-radius`, ...).
+
+What the colours drive:
+
+| Token | Default | Drives |
+|---|---|---|
+| `$primary` | `#2196f3` | Links, section titles, the header line and links, the footer, Element Plus |
+| `$btn-primary-bg`, `-hover-bg`, `-active-bg` | from `$primary` | Filled primary buttons. With Cranelad's blue, deeper blues for readable white text; with another `$primary`, that colour, darkened 15% / 20% on hover / press |
+| `$body-bg`, `$body-color` | `#000`, `#fff` | The page, and the header background |
+| `$site-header-bg` | `$body-bg` | Header background |
+| `$site-header-border-color` | `$primary` | The line under the header |
+| `$site-header-link-color`, `$site-header-link-hover-color` | `$primary`, `$info` | Header brand and links |
+| `$site-header-collapsed-link-color` | `#fff` | Links in the collapsed (mobile) menu |
+| `$site-footer-color` | `$primary` | Footer text |
+| `$section-title-color`, `$section-border-color` | `$primary`, `$primary` at 35% | `.section-title` and the line between sections |
+| `$input-border-color`, `$input-focus-border-color` | `currentcolor`, `$primary` | Pill inputs and their icons |
+| `$card-bg`, `$card-color` | `#fff`, `#2c2c2c` | Cards |
+| `$card-box-shadow` | none | Raised cards (Bootstrap's variable, drawn even with `$enable-shadows` off) |
+| `$element-plus-colors` | `true` | `false` keeps Element Plus's own colours; the font and radii still match |
+
+The defaults are for black pages. A project with a light page also sets the
+text, border and navbar colours that assume a dark background, for example:
+
+```scss
+$primary: #2c457d;
+$body-bg: #f8f9fe;
+$body-color: #2c2c2c;
+$body-emphasis-color: #000;
+$text-muted-color: #6c757d;
+$body-secondary-bg: #e9ecef;
+$body-tertiary-bg: #f8f9fa;
+$border-color: #e3e3e3;
+$input-border-color: #e3e3e3;
+$form-switch-color: rgba(#000, .25);
+
+// A coloured header with white links (the line under it is $primary too)
+$site-header-bg: $primary;
+$site-header-link-color: rgba(#fff, .85);
+$site-header-link-hover-color: #fff;
+
+// Bootstrap's own light navbar colours (the kit's are light-on-dark)
+$navbar-light-color: rgba(#000, .65);
+$navbar-light-hover-color: rgba(#000, .8);
+$navbar-light-active-color: rgba(#000, .9);
+$navbar-light-brand-color: rgba(#000, .9);
+$navbar-light-brand-hover-color: rgba(#000, .9);
+$navbar-light-icon-color: rgba(#000, .65);
+$navbar-light-toggler-border-color: rgba(#000, .15);
+```
+
+The project's own Sass can still use the theme's values without compiling
+the kit twice: set the same tokens, then `@import '@cranelad/ui/tokens.scss'`.
+
 ## Components
 
 ### Plugin (`app.use(CraneladUi)`)

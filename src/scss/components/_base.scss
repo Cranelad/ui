@@ -54,7 +54,7 @@ textarea.form-control {
 .input-group-text {
   color: inherit;
   background-color: transparent;
-  border-color: currentcolor;
+  border-color: $input-border-color;
   border-radius: $input-border-radius;
 }
 

@@ -13,6 +13,14 @@
   --#{$prefix}border-color: #{$gray-300};
 }
 
+// Optional raised cards: Bootstrap's $card-box-shadow, drawn without having
+// to turn on $enable-shadows for everything.
+@if $card-box-shadow and not $enable-shadows {
+  .card {
+    box-shadow: var(--#{$prefix}card-box-shadow);
+  }
+}
+
 // Bootstrap gives .card-body the card's text colour, which would override the
 // readable colour text-bg-* picks for a coloured card.
 .card[class*="text-bg-"] .card-body {

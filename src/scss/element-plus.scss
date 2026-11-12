@@ -5,14 +5,19 @@
 @import "index";
 
 :root {
-  --el-color-primary: #{$primary};
-  --el-color-primary-light-3: #{mix(#fff, $primary, 30%)};
-  --el-color-primary-light-5: #{mix(#fff, $primary, 50%)};
-  --el-color-primary-light-7: #{mix(#fff, $primary, 70%)};
-  --el-color-primary-light-8: #{mix(#fff, $primary, 80%)};
-  --el-color-primary-light-9: #{mix(#fff, $primary, 90%)};
-  --el-color-primary-dark-2: #{mix(#000, $primary, 20%)};
+  // $element-plus-colors: false keeps Element Plus's own colours.
+  @if $element-plus-colors {
+    --el-color-primary: #{$primary};
+    --el-color-primary-light-3: #{mix(#fff, $primary, 30%)};
+    --el-color-primary-light-5: #{mix(#fff, $primary, 50%)};
+    --el-color-primary-light-7: #{mix(#fff, $primary, 70%)};
+    --el-color-primary-light-8: #{mix(#fff, $primary, 80%)};
+    --el-color-primary-light-9: #{mix(#fff, $primary, 90%)};
+    --el-color-primary-dark-2: #{mix(#000, $primary, 20%)};
+  }
   --el-font-family: #{inspect($font-family-sans-serif)};
   --el-border-radius-base: #{$border-radius};
-  --el-text-color-primary: #{$card-color};  // Element Plus sits on light cards
+  @if $element-plus-colors {
+    --el-text-color-primary: #{$card-color};  // Element Plus sits on light cards
+  }
 }

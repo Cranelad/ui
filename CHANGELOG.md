@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.3.0
+
+- Themeable: every token in `_variables.scss` is `!default`, so a project
+  sets its own colours (or any token) before importing the kit, with
+  `@import` or `@use ... with ()`. See "Theming" in the README. Without
+  overrides the CSS is exactly as in 1.2.0.
+- New tokens for the site pieces, defaulting to the theme colours as before:
+  `$site-header-bg`, `$site-header-border-color`, `$site-header-link-color`,
+  `$site-header-link-hover-color`, `$site-header-collapsed-link-color`,
+  `$site-footer-color`, `$section-title-color`, `$section-border-color`.
+- Primary buttons follow a project's `$primary` (darkened on hover and when
+  pressed); Cranelad's blue keeps its deeper, readable button blues.
+- `$card-box-shadow` (Bootstrap's) gives raised cards without turning on
+  `$enable-shadows`.
+- `$element-plus-colors: false` keeps Element Plus's own colours and only
+  matches its font and radii.
+- Input-group icons use `$input-border-color`.
+
 ## 1.2.0
 
 - Filled primary buttons use a deeper blue (`$btn-primary-bg`, #1976d2) so their

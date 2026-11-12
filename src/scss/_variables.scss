@@ -2,44 +2,47 @@
 //
 // The Cranelad look: black pages, blue headings and links, a blue line under
 // the header, blue cards and pill-shaped buttons and inputs.
+//
+// Every token is !default, so a project can set its own before importing the
+// kit (see "Theming" in the README).
 
 // Colours
-$primary: #2196f3;   // headings, links, the header line, primary buttons
-$info: #2ca8ff;      // the blue cards: .text-bg-info
-$min-contrast-ratio: 3;   // white text on $primary buttons, as before
+$primary: #2196f3 !default;   // headings, links, the header line, primary buttons
+$info: #2ca8ff !default;      // the blue cards: .text-bg-info
+$min-contrast-ratio: 3 !default;   // white text on $primary buttons, as before
 
-$body-bg: #000;
-$body-color: #fff;
-$body-emphasis-color: #fff;
-$text-muted-color: rgba(#fff, .7);
-$body-secondary-color: $text-muted-color;
-$body-secondary-bg: #222;     // disabled inputs, progress tracks, ...
-$body-tertiary-bg: #111;
-$border-color: rgba(#fff, .2);
+$body-bg: #000 !default;
+$body-color: #fff !default;
+$body-emphasis-color: #fff !default;
+$text-muted-color: rgba(#fff, .7) !default;
+$body-secondary-color: $text-muted-color !default;
+$body-secondary-bg: #222 !default;     // disabled inputs, progress tracks, ...
+$body-tertiary-bg: #111 !default;
+$border-color: rgba(#fff, .2) !default;
 
 // Typography
 // Open Sans is bundled with the kit (_fonts.scss), so every visitor sees it.
-$font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-$font-size-base: 1rem;      // 16px, for comfortable reading on black
-$headings-font-weight: 400;
-$h1-font-size: 3.0625rem;   // 49px
-$h2-font-size: 2.1875rem;   // 35px
-$h3-font-size: 1.625rem;    // 26px
-$h4-font-size: 1.3125rem;   // 21px
-$h5-font-size: 1.125rem;    // 18px
-$h6-font-size: .875rem;
-$lead-font-size: 1.3125rem;
-$lead-font-weight: 400;
+$font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Arial, sans-serif !default;
+$font-size-base: 1rem !default;      // 16px, for comfortable reading on black
+$headings-font-weight: 400 !default;
+$h1-font-size: 3.0625rem !default;   // 49px
+$h2-font-size: 2.1875rem !default;   // 35px
+$h3-font-size: 1.625rem !default;    // 26px
+$h4-font-size: 1.3125rem !default;   // 21px
+$h5-font-size: 1.125rem !default;    // 18px
+$h6-font-size: .875rem !default;
+$lead-font-size: 1.3125rem !default;
+$lead-font-weight: 400 !default;
 
 // Links
-$link-color: $primary;
-$link-decoration: none;
-$link-hover-decoration: underline;
+$link-color: $primary !default;
+$link-decoration: none !default;
+$link-hover-decoration: underline !default;
 
 // Shape
-$border-radius: .1875rem;
-$border-radius-sm: .1875rem;
-$border-radius-lg: .1875rem;
+$border-radius: .1875rem !default;
+$border-radius-sm: .1875rem !default;
+$border-radius-lg: .1875rem !default;
 
 // Layout
 $container-max-widths: (
@@ -48,62 +51,88 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1141px   // Bootstrap needs each larger; keep 1140 wide
-);
+) !default;
 
 // Buttons
-// Filled primary buttons use a deeper blue than $primary, so their white text
-// meets WCAG AA (4.6:1); headings and links keep the brighter blue.
-$btn-primary-bg: #1976d2;
-$btn-primary-hover-bg: #1565c0;
-$btn-primary-active-bg: #0d47a1;
-$btn-font-size: .875rem;    // 14px
-$btn-padding-y: .6875rem;
-$btn-padding-x: 1.375rem;
-$btn-font-size-sm: $btn-font-size;
-$btn-padding-y-sm: .3125rem;
-$btn-padding-x-sm: .9375rem;
-$btn-font-size-lg: 1rem;
-$btn-padding-y-lg: .9375rem;
-$btn-padding-x-lg: 3rem;
+// Filled primary buttons: with Cranelad's blue they use a deeper blue than
+// $primary, so their white text meets WCAG AA (4.6:1) while headings and links
+// keep the brighter blue. With any other $primary they use that colour,
+// darkened on hover and when pressed. Set these to override either.
+$btn-primary-bg: null !default;
+$btn-primary-hover-bg: null !default;
+$btn-primary-active-bg: null !default;
+@if $primary == #2196f3 {
+  $btn-primary-bg: $btn-primary-bg or #1976d2;
+  $btn-primary-hover-bg: $btn-primary-hover-bg or #1565c0;
+  $btn-primary-active-bg: $btn-primary-active-bg or #0d47a1;
+} @else {
+  $btn-primary-bg: $btn-primary-bg or $primary;
+  $btn-primary-hover-bg: $btn-primary-hover-bg or mix(#000, $btn-primary-bg, 15%);
+  $btn-primary-active-bg: $btn-primary-active-bg or mix(#000, $btn-primary-bg, 20%);
+}
+$btn-font-size: .875rem !default;    // 14px
+$btn-padding-y: .6875rem !default;
+$btn-padding-x: 1.375rem !default;
+$btn-font-size-sm: $btn-font-size !default;
+$btn-padding-y-sm: .3125rem !default;
+$btn-padding-x-sm: .9375rem !default;
+$btn-font-size-lg: 1rem !default;
+$btn-padding-y-lg: .9375rem !default;
+$btn-padding-x-lg: 3rem !default;
 
 // Inputs: transparent pills bordered in the text colour, so they work on the
 // black page and inside light cards alike.
-$input-bg: transparent;
-$input-color: inherit;
-$input-border-color: currentcolor;
-$input-border-radius: 1.875rem;
-$input-border-radius-sm: 1.875rem;
-$input-border-radius-lg: 1.875rem;
-$input-font-size: .875rem;
-$input-padding-y: .625rem;
-$input-padding-x: 1.125rem;
-$input-placeholder-color: #888;
-$input-focus-bg: transparent;
-$input-focus-color: inherit;
-$input-focus-border-color: $primary;
-$input-focus-box-shadow: none;
-$form-label-margin-bottom: .25rem;
-$form-select-indicator-color: #888;
-$form-switch-color: rgba(#fff, .5);
+$input-bg: transparent !default;
+$input-color: inherit !default;
+$input-border-color: currentcolor !default;
+$input-border-radius: 1.875rem !default;
+$input-border-radius-sm: 1.875rem !default;
+$input-border-radius-lg: 1.875rem !default;
+$input-font-size: .875rem !default;
+$input-padding-y: .625rem !default;
+$input-padding-x: 1.125rem !default;
+$input-placeholder-color: #888 !default;
+$input-focus-bg: transparent !default;
+$input-focus-color: inherit !default;
+$input-focus-border-color: $primary !default;
+$input-focus-box-shadow: none !default;
+$form-label-margin-bottom: .25rem !default;
+$form-select-indicator-color: #888 !default;
+$form-switch-color: rgba(#fff, .5) !default;
 
 // Cards: light by default (dashboards, admin forms); .text-bg-info for blue.
-$card-bg: #fff;
-$card-color: #2c2c2c;
-$card-border-width: 0;
-$card-spacer-y: 1.25rem;
-$card-spacer-x: 1.25rem;
-$card-cap-bg: transparent;
+$card-bg: #fff !default;
+$card-color: #2c2c2c !default;
+$card-border-width: 0 !default;
+$card-spacer-y: 1.25rem !default;
+$card-spacer-x: 1.25rem !default;
+$card-cap-bg: transparent !default;
 
 // Navbars. The page is dark, so the default ("light") navbar has light text too.
 // The site header's blue links are set in components/_header.scss.
-$navbar-padding-y: 1rem;
-$navbar-brand-font-size: .875rem;
-$navbar-nav-link-padding-x: .9375rem;
-$navbar-light-color: rgba(#fff, .75);
-$navbar-light-hover-color: #fff;
-$navbar-light-active-color: #fff;
-$navbar-light-disabled-color: rgba(#fff, .4);
-$navbar-light-brand-color: #fff;
-$navbar-light-brand-hover-color: #fff;
-$navbar-light-icon-color: rgba(#fff, .75);
-$navbar-light-toggler-border-color: rgba(#fff, .15);
+$navbar-padding-y: 1rem !default;
+$navbar-brand-font-size: .875rem !default;
+$navbar-nav-link-padding-x: .9375rem !default;
+$navbar-light-color: rgba(#fff, .75) !default;
+$navbar-light-hover-color: #fff !default;
+$navbar-light-active-color: #fff !default;
+$navbar-light-disabled-color: rgba(#fff, .4) !default;
+$navbar-light-brand-color: #fff !default;
+$navbar-light-brand-hover-color: #fff !default;
+$navbar-light-icon-color: rgba(#fff, .75) !default;
+$navbar-light-toggler-border-color: rgba(#fff, .15) !default;
+
+// Site pieces (components/). They follow the colours above unless set.
+$site-header-bg: $body-bg !default;
+$site-header-border-color: $primary !default;
+$site-header-link-color: $primary !default;       // brand and links
+$site-header-link-hover-color: $info !default;
+$site-header-collapsed-link-color: #fff !default;  // links in the collapsed (mobile) menu
+$site-footer-color: $primary !default;
+$section-border-color: rgba($primary, .35) !default;
+$section-title-color: $primary !default;
+$card-box-shadow: null !default;                   // Bootstrap's; e.g. 0 5px 25px rgba(0, 0, 0, .2)
+
+// Element Plus (style-element-plus.scss): false keeps Element Plus's own
+// colours and only matches the font and radii.
+$element-plus-colors: true !default;
